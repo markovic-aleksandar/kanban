@@ -1,0 +1,16 @@
+.Sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $sidebarWidth;
+  height: 100vh;
+  background-color: var(--bckg-weak);
+  border-right: 1px solid var($--borderLine);
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    height: 6rem;
+    padding-left: 2rem;
+  }
+}

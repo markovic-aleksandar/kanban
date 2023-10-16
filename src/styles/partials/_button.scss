@@ -1,0 +1,22 @@
+.Button, .Button__icon {
+  display: inline-block;
+  font-size: 0.9375rem;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+
+  &.Button__icon {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+  }
+
+  &__main {
+    color: $white;
+    background-color: $purple-700;
+    &:hover {
+      background-color: $purple-200;
+    }
+  }
+}

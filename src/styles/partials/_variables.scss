@@ -1,0 +1,42 @@
+// fonts
+$font: 'Plus Jakarta Sans', sans-serif;
+
+// colors
+$white: #ffffff;
+$dark-300: #3f3e43;
+$dark-400: #2b2c37;
+$dark-500: #20212c;
+$dark-700: #000000;
+$gray-200: #f4f7fd;
+$gray-250: #f0effa;
+$gray-300: #e4ebfa;
+$gray-400: #828fa3;
+$gray-500: rgba(130,143,163,.4);
+$gray-600: #3e3f4e;
+$purple-700: #635fc7; 
+$purple-200: #A8A4FF;
+$lightBlue: #49C4E5;
+$green: #67E2AE;
+$orange: #e5a449;
+$red: #ea5555;
+$blue: #2a3fdb;
+$brown: #c36e6e;
+
+// layout
+$sidebarWidth: 300px;
+
+// addons
+$transition: all 0.2s ease;
+
+// breakpoints
+$breakpoints-up: (
+  'medium': '768px',
+  'large': '1024px',
+  'xLarge': '1366px'
+);
+
+@mixin breakpoint-up($size) {
+  @media (min-width: map-get($breakpoints-up, $size)) {
+    @content;
+  }
+}

@@ -1,0 +1,15 @@
+// import font
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+// fundamentals
+@import './partials/variables';
+@import './partials/theme';
+@import './partials/global';
+
+// components
+@import './partials/button';
+@import './partials/dropdown-menu';
+
+// layouts
+@import './partials/navbar';
+@import './partials/sidebar';

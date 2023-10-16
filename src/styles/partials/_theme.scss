@@ -1,0 +1,38 @@
+$--bckg-strong: --bckg-strong;
+$--bckg-weak: --bckg-weak;
+$--title: --title;
+$--borderLine: --borderLine;
+$--dropdown: --dropdown;
+$--iconButton: --iconButton;
+
+$theme-map-light: (
+  $--bckg-strong: $gray-200,
+  $--bckg-weak: $white,
+  $--title: $dark-700,
+  $--borderLine: $gray-300,
+  $--dropdown: $white,
+  $--iconButton: $gray-300
+);
+
+$theme-map-dark: (
+  $--bckg-strong: $dark-500,
+  $--bckg-weak: $dark-400,
+  $--title: $white,
+  $--borderLine: $dark-300,
+  $--dropdown: $dark-500,
+  $--iconButton: $dark-500
+);
+
+@mixin spread-map($map: ()) {
+  @each $key, $value in $map {
+    #{$key}: $value;
+  }
+}
+
+.light {
+  @include spread-map($theme-map-light);
+}
+
+.dark {
+  @include spread-map($theme-map-dark);
+}
