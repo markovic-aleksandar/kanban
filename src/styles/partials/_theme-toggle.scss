@@ -1,0 +1,29 @@
+.ThemeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1.625rem;
+  width: 100%;
+  background-color: var($--bckg-strong);
+  padding: 0.9375rem 0;
+  border-radius: 6px;
+
+  &__button {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: $purple-700;
+    border-radius: 30px;
+
+    span {
+      position: absolute;
+      top: 2.7px;
+      left: 4px;
+      display: block;
+      width: 14px;
+      height: 14px;
+      background-color: $white;
+      border-radius: 50%;
+    }
+  }
+}

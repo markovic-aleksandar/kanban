@@ -1,5 +1,5 @@
-import SidebarBoards from './SidebarBoards';
 import SidebarManage from './SidebarManage';
+import { BoardsList } from '../../components';
 import LogoDark from '../../assets/logo-dark.svg';
 import LogoLight from '../../assets/logo-light.svg';
 
@@ -10,7 +10,7 @@ const Sidebar = () => {
         <img src={LogoLight} alt="kanban" />
       </div>
       <div className="Sidebar__content">
-        <SidebarBoards />
+        <BoardsList />
         <SidebarManage />
       </div>
     </aside>

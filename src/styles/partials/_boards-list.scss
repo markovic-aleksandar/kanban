@@ -1,0 +1,74 @@
+.BoardsList {
+  &__count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.4px;
+    padding-left: 2rem;
+  }
+
+  &__tabs {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+
+  button {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.5rem 0.375rem 0.5rem 2rem;
+    color: $gray-400;
+    width: 17.25rem;
+    height: fit-content;
+    min-height: 2.75rem;
+    line-height: 1.4;
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+    column-gap: 0.9375rem;
+    transition: $transition;
+    
+    svg {
+      min-width: 1rem;
+    }
+  }
+
+  & .BoardsList__tab {
+    border-radius: 0 25px 25px 0;
+
+    &:not(:last-child) {
+      margin-bottom: 0.25rem;
+    }
+
+    &:hover {
+      background-color: $purple-200;
+      color: $white;
+
+      svg path {
+        fill: $white;
+      }
+    }
+
+    &--active {
+      background-color: $purple-700;
+      color: $white;
+
+      svg path {
+        fill: $white;
+      }
+
+      &:hover {
+        background-color: $purple-700;
+      }
+    }
+  }
+
+  & .BoardsList__create {
+    color: $purple-700;
+    margin-top: 0.25rem;
+    
+    &:hover {
+      color: $purple-200;
+    }
+  }
+}

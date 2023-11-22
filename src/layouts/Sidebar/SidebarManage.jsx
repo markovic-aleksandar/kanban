@@ -1,6 +1,15 @@
+import { ThemeToggle } from '../../components';
+import { IconHide } from '../../constants/icons';
+
 const SidebarManage = () => {
   return (
-    <div>Sidebar Manage</div>
+    <div className="Sidebar__manage">
+      <ThemeToggle />
+      <button type="button" className="Sidebar__hideButton">
+        <IconHide />
+        Hide Sidebar
+      </button>
+    </div>
   )
 }
 
