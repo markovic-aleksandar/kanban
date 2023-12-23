@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useDropdownMenu from '../../hooks/useDropdownMenu';
 import useMediaQuery from '../../hooks/useMediaQuery';
-import { ButtonIcon, DropdownMenu } from "../../components";
+import { ButtonIcon, DropdownMenu } from "..";
 import { IconPlus, IconEllipsis } from '../../constants/icons';
 
 const NavbarManage = () => {

@@ -1,10 +1,9 @@
-import { IconBoard } from '../constants/icons';
-
+import { IconBoard } from '../../constants/icons';
 
 // list of boards - ovo menjas kasnije sa pravim podacima primices ih kroz props
 const boardsList = ['Platform Launch', 'Marketing Plan', 'Roadmap'];
 
-const BoardsList = () => {
+const SidebarBoardsList = () => {
   return (
     <div className="BoardsList">
       <p className="BoardsList__count">All boards (3)</p>
@@ -32,4 +31,4 @@ const BoardsList = () => {
   )
 }
 
-export default BoardsList;
+export default SidebarBoardsList;

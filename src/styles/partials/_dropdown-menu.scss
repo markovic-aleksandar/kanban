@@ -5,6 +5,7 @@
   background-color: var(--dropdown);
   border-radius: 10px;
   box-shadow: 0 0 8px #364e7e1a;
+  z-index: 1;
 
   .Dropdown__option {
     font-weight: 500;

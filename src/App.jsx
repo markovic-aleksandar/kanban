@@ -1,5 +1,5 @@
 import useMediaQuery from './hooks/useMediaQuery';
-import { Navbar, Sidebar, Board } from './layouts';
+import { Navbar, Sidebar, Board } from './components';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
 const App = () => {
@@ -12,7 +12,6 @@ const App = () => {
         nativeMobileScroll={true}
         vertical={false}
         hideScrollbars={false}
-        // onScroll={handleBoardScroll}
         component="main"
         className="Main"
         >

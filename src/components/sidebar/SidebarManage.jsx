@@ -1,4 +1,4 @@
-import { ThemeToggle } from '../../components';
+import { ThemeToggle } from '..';
 import { IconHide } from '../../constants/icons';
 
 const SidebarManage = () => {
