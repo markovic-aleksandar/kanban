@@ -2,10 +2,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: $sidebarWidth;
+  width: $sidebar-width;
   height: 100%;
   background-color: var(--bckg-weak);
-  border-right: 1px solid var($--borderLine);
+  border-right: 1px solid var($--border-line);
   z-index: 10;
 
   &__logo {
@@ -20,7 +20,7 @@
     flex-direction: column;
     row-gap: 1.25rem;
     justify-content: space-between;
-    height: calc(100% - $navbarHeight);
+    height: calc(100% - $navbar-height);
     padding: 1rem 0 2rem;
 
     .BoardsList {

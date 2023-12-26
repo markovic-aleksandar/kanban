@@ -5,6 +5,7 @@ const Board = () => {
     <div className="Board">
       <div className="Board__columns">
         <BoardColumn />
+        <BoardColumn isAdding={true} />
       </div>
     </div>
   )

@@ -1,23 +1,19 @@
-import { useEffect } from 'react';
-import useDropdownMenu from '../../hooks/useDropdownMenu';
 import useMediaQuery from '../../hooks/useMediaQuery';
-import { ButtonIcon, DropdownMenu } from "..";
+import { ButtonIcon } from "..";
+import Dropdown from '../Dropdown';
 import { IconPlus, IconEllipsis } from '../../constants/icons';
 
 const NavbarManage = () => {
-  const {options, isOpen, selectedOption, handleToggleDropdownMenu, selectOption} = useDropdownMenu([
-    {value: 'edit', label: 'Edit  Board'},
-    {value: 'delete', label: 'Delete Board'}
-  ]);
   const isMobile = useMediaQuery('mobile');
-
-  // handle when happened click on option
-  useEffect(() => {
-    if (!selectedOption) return;
-    // onda ovde ide neka f-ja iz service koja prima paramtetar ako ova vrednost nije prazna
-    // i isto u ovom slucaju, ali samo ovde, mozda bi trebalo da se resetuje na null ili mozda i ne, ali samo vodi racuna da nesto ne pokrene ponovno pokretanja ovog effect-a a on ce imati vrednost
-    console.log('run function');
-  }, [selectedOption]);
+  const dropdownOptions = [
+    {key: 'edit-board', name: 'Edit Board', style: null},
+    {key: 'delete-board', name: 'Delete Board', style: {color: '#ea5555'}}
+  ]; // mozda neka f-ja koja ce da mi kreira ovaj array template
+  
+  // handle board
+  const handleBoard = optionValue => {
+    console.log(optionValue);
+  }
 
   return (
     <div className="Manage">
@@ -25,15 +21,20 @@ const NavbarManage = () => {
         <IconPlus />
       </ButtonIcon>
       
-      <button
-        type="button"
-        className="Dropdown__button"
-        onClick={handleToggleDropdownMenu}
-      >
-        <IconEllipsis />
-      </button>
-      
-      {isOpen && <DropdownMenu options={options} handleAction={selectOption} />}
+      <Dropdown 
+        menuOptions={dropdownOptions}
+        menuPlacement="right"
+        menuStyle={{width: '12.5rem'}}
+        menuTrigger={
+          <button
+            type="button"
+            className="Dropdown__button"
+          >
+            <IconEllipsis />
+          </button>
+        }
+        menuAction={handleBoard}
+      />
     </div>
   )
 }

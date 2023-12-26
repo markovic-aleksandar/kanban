@@ -1,0 +1,94 @@
+.Board {
+  position: absolute;
+  width: auto;
+  min-width: 100%;
+  height: 100%;
+  padding: 1.5rem 2rem;
+
+  &__columns {
+    display: flex;
+    column-gap: 1.5rem;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__column {
+    width: 17.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &-adding {
+      position: relative;
+      background: linear-gradient(to bottom,rgba(121,132,147,.2),rgba(130,143,163,.1),rgba(130,143,163,0));
+      border-radius: 8px;
+      cursor: pointer;
+
+      button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: clamp(1.2rem, 3vw, 1.5rem);
+        font-weight: 700;
+        color: $gray-400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: 0.3125rem;
+        transition: $transition;
+      }
+
+      &:hover {
+        button {
+          color: $purple-700;
+        }
+      }
+    }
+
+    &-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: $gray-400;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    &-color {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-color: rgb(68, 255, 68);
+      margin-right: 12px;
+      border-radius: 50%;
+    }
+  }
+
+  &__tasks {
+    flex: 1;
+  }
+
+  &__task {
+    padding: 1.5rem 1rem;
+    background-color: var(--bckg-weak);
+    border: 1px solid var(--border-line);
+    border-radius: 8px;
+
+    h3 {
+      color: var(--title);
+      margin-bottom: 8px;
+    }
+
+    h4 {
+      color: $gray-400;
+    }
+  }
+
+  @include breakpoint-up(medium) {
+    left: $sidebar-width;
+  }
+}

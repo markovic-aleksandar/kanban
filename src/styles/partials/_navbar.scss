@@ -6,10 +6,10 @@
   height: 6rem;
   background-color: var(--bckg-weak);
   padding: 0 1rem;
-  border-bottom: 1px solid var($--borderLine);
+  border-bottom: 1px solid var($--border-line);
 
   @include breakpoint-up(medium) {
-    padding: 0 2rem 0 calc($sidebarWidth + 2rem);
+    padding: 0 2rem 0 calc($sidebar-width + 2rem);
   }
 
   .Boards {
@@ -54,7 +54,7 @@
     }
 
     &:hover {
-      background-color: var(--iconButton);
+      background-color: var(--icon-button);
     }
   }
 

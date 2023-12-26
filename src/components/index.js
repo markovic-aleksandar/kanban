@@ -2,7 +2,7 @@
 export { Button } from './Button';
 export { ButtonIcon } from './Button';
 
-export { default as DropdownMenu } from './DropdownMenu';
+// export { default as DropdownMenu } from './Dropdown';
 export { default as ThemeToggle } from './ThemeToggle';
 
 // navbar

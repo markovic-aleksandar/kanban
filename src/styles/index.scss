@@ -8,11 +8,15 @@
 
 // components
 @import './partials/button';
-@import './partials/dropdown-menu';
-@import './partials/boards-list';
+@import './partials/dropdown';
 @import './partials/theme-toggle';
 
-// layouts
+// navbar
 @import './partials/navbar';
-@import './partials/sidebar';
-@import './partials/board';
+
+// sidebar
+@import './partials/sidebar/sidebar';
+@import './partials/sidebar/sidebar-boards-list';
+
+// board
+@import './partials/board/board';

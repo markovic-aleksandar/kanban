@@ -33,6 +33,10 @@ h3 {
   font-size: 0.9375rem;
 }
 
+h4 {
+  font-size: 0.75rem;
+}
+
 // reset
 ul, ol {
   list-style: none;
@@ -61,6 +65,8 @@ button {
 }
 
 .Main {
+  position: relative;
   width: 100%;
   height: 100%;
+  background-color: var(--bckg-strong);
 }

@@ -1,0 +1,45 @@
+.Dropdown {
+  position: relative;
+
+  &__options {
+    position: absolute;
+    top: calc(100% + 10px);
+    width: max-content; 
+    padding: 1.25rem 1.5rem;
+    background-color: var(--dropdown);
+    border-radius: 10px;
+    box-shadow: 0 0 8px #364e7e1a;
+    z-index: 1;
+
+    &-left {
+      left: 0;
+    }
+
+    &-center {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &-right {
+      right: 0;
+    }
+  }
+
+  &__option {
+    &:not(:last-child) {
+      margin-bottom: 1.125rem;
+    }
+
+    button {
+      width: 100%;
+      font-weight: 500;
+      color: #828fa3;
+      cursor: pointer;
+      transition: $transition;
+      
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+}

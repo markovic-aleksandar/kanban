@@ -1,26 +1,26 @@
 $--bckg-strong: --bckg-strong;
 $--bckg-weak: --bckg-weak;
 $--title: --title;
-$--borderLine: --borderLine;
+$--border-line: --border-line;
 $--dropdown: --dropdown;
-$--iconButton: --iconButton;
+$--icon-button: --icon-button;
 
 $theme-map-light: (
   $--bckg-strong: $gray-200,
   $--bckg-weak: $white,
   $--title: $dark-700,
-  $--borderLine: $gray-300,
+  $--border-line: $gray-300,
   $--dropdown: $white,
-  $--iconButton: $gray-300
+  $--icon-button: $gray-300
 );
 
 $theme-map-dark: (
   $--bckg-strong: $dark-500,
   $--bckg-weak: $dark-400,
   $--title: $white,
-  $--borderLine: $dark-300,
+  $--border-line: $dark-300,
   $--dropdown: $dark-500,
-  $--iconButton: $dark-500
+  $--icon-button: $dark-500
 );
 
 @mixin spread-map($map: ()) {
