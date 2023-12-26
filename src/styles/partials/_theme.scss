@@ -29,10 +29,10 @@ $theme-map-dark: (
   }
 }
 
-.light {
+.App__light {
   @include spread-map($theme-map-light);
 }
 
-.dark {
+.App__dark {
   @include spread-map($theme-map-dark);
 }

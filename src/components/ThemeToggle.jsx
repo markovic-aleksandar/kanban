@@ -1,12 +1,21 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme } from '../services/globalService';
 import { IconSun, IconMoon } from '../constants/icons';
 
 const ThemeToggle = () => {
+  const {currentTheme} = useSelector(store => store.global);
+  const dispatch = useDispatch();
+
   return (
-    <div className="ThemeToggle">
+    <div className={`ThemeToggle ThemeToggle__${currentTheme}`}>
       <span className="ThemeToggle__icon">
         <IconSun />
       </span>
-      <button type="button" className="ThemeToggle__button">
+      <button 
+        type="button" 
+        className="ThemeToggle__button"
+        onClick={() => toggleTheme(dispatch, currentTheme)}
+      >
         <span></span>  
       </button>
       <span className="ThemeToggle__icon">

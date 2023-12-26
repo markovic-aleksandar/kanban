@@ -24,6 +24,19 @@
       height: 14px;
       background-color: $white;
       border-radius: 50%;
+      transition: left 0.2s ease;
+    }
+  }
+
+  &__dark {
+    button span {
+      left: 4px;
+    }
+  }
+
+  &__light {
+    button span {
+      left: 23px;
     }
   }
 }
