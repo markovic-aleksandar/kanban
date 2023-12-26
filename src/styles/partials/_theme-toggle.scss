@@ -17,8 +17,9 @@
 
     span {
       position: absolute;
-      top: 2.5px;
+      top: 50%;
       left: 4px;
+      transform: translateY(-50%);
       display: block;
       width: 14px;
       height: 14px;
