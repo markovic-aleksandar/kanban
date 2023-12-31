@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleTheme } from '../services/globalService';
+import { toggleTheme } from '../services/global';
 import { IconSun, IconMoon } from '../constants/icons';
 
 const ThemeToggle = () => {

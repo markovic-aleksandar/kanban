@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getFromStorage } from '../../utils';
 
 const initialState = {
-  currentTheme: getFromStorage('theme') || 'dark'
+  currentTheme: getFromStorage('theme') || 'dark',
+  currentBoard: null
 };
 
 const globalSlice = createSlice({
