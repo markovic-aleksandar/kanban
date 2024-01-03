@@ -1,26 +1,21 @@
 .Sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  left: -$sidebar-width;
   width: $sidebar-width;
   height: 100%;
+  padding-top: $navbar-height;
   background-color: var(--bckg-weak);
   border-right: 1px solid var($--border-line);
-  z-index: 10;
-
-  &__logo {
-    display: flex;
-    align-items: center;
-    height: 6rem;
-    padding-left: 2rem;
-  }
+  z-index: 1;
+  transition: $transition-layout;
 
   &__content {
     display: flex;
     flex-direction: column;
     row-gap: 1.25rem;
     justify-content: space-between;
-    height: calc(100% - $navbar-height);
+    height: 100%;
     padding: 1rem 0 2rem;
 
     .BoardsList {
@@ -44,5 +39,9 @@
         opacity: 0.6;
       }
     }
+  }
+
+  &__is-visible {
+    left: 0;
   }
 }

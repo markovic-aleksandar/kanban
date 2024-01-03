@@ -16,7 +16,7 @@ const useMediaQuery = query => {
     const list = getMedia(currentQuery);
     setIsMatch(list.matches);
     setMediaQueryList(list);
-  }, [currentQuery])
+  }, [currentQuery]);
 
   useEventListener('change', handleChangeMediaMatch, mediaQueryList)
 
@@ -24,20 +24,3 @@ const useMediaQuery = query => {
 }
 
 export default useMediaQuery;
-
-// const useMediaQuery = query => {
-//   const currentQuery = query === 'mobile' ? '(max-width: 767px)' : query;
-//   const [isMatch, setIsMatch] = useState(getMedia(currentQuery).matches);
-
-//   // handle change media match
-//   const handleChangeMediaMatch = e => {
-//     setIsMatch(e.matches);
-//   }
-
-//   // add event listener window media query
-//   useEventListener('change', handleChangeMediaMatch, getMedia(currentQuery));
-
-//   return isMatch;
-// }
-
-// export default useMediaQuery;

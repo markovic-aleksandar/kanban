@@ -7,15 +7,34 @@
   background-color: var(--bckg-weak);
   padding: 0 1rem;
   border-bottom: 1px solid var($--border-line);
+  z-index: 2;
 
   @include breakpoint-up(medium) {
-    padding: 0 2rem 0 calc($sidebar-width + 2rem);
+    padding: 0 2rem;
   }
 
   .Boards {
+    display: flex;
+    align-items: center;
+
+    &__logo {
+      @include breakpoint-up(medium) {
+        width: calc($sidebar-width - 2rem);
+        height: $navbar-height;
+        display: flex;
+        align-items: center;
+        border-right: 1px solid var($--border-line);
+      }
+    }
+    
     &__title {
       color: var(--title);
       letter-spacing: 0.5px;
+      padding-left: 0.9375rem;
+
+      @include breakpoint-up(medium) {
+        padding-left: 2rem;
+      }
     }
   }
 
@@ -55,22 +74,6 @@
 
     &:hover {
       background-color: var(--icon-button);
-    }
-  }
-
-  .Dropdown__menu {
-    right: 0;
-    width: 13rem;
-  }
-
-  .Dropdown__option {
-    &:last-child {
-      color: $red !important;
-    }
-
-    &:hover {
-      color: $gray-400;
-      opacity: 0.6;      
     }
   }
 }

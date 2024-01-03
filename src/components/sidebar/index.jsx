@@ -1,14 +1,14 @@
+import { useSelector } from 'react-redux';
 import SidebarManage from './SidebarManage';
 import SidebarBoardsList from './SidebarBoardsList';
-import LogoDark from '../../assets/logo-dark.svg';
-import LogoLight from '../../assets/logo-light.svg';
 
 const Sidebar = () => {
+  const {sidebarIsVisible} = useSelector(store => store.global);
+
   return (
-    <aside className="Sidebar">
-      <div className="Sidebar__logo">
-        <img src={LogoLight} alt="kanban" />
-      </div>
+    <aside 
+      className={sidebarIsVisible ? 'Sidebar Sidebar__is-visible' : 'Sidebar'}
+    >
       <div className="Sidebar__content">
         <SidebarBoardsList />
         <SidebarManage />

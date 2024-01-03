@@ -1,6 +1,7 @@
 // fundamentals
 export { Button } from './Button';
 export { ButtonIcon } from './Button';
+export { default as Loader } from './Loader';
 
 // export { default as DropdownMenu } from './Dropdown';
 export { default as ThemeToggle } from './ThemeToggle';
