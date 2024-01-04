@@ -26,14 +26,21 @@
         border-right: 1px solid var($--border-line);
       }
     }
-    
-    &__title {
-      color: var(--title);
-      letter-spacing: 0.5px;
-      padding-left: 0.9375rem;
+
+    &__name {
+      position: relative;
+      height: $navbar-height;
+      margin-left: 0.9375rem;
+      display: flex;
+      align-items: center;
+
+      h1 {
+        color: var(--title);
+        letter-spacing: 0.5px;
+      }
 
       @include breakpoint-up(medium) {
-        padding-left: 2rem;
+        margin-left: 2rem;
       }
     }
   }
@@ -50,6 +57,8 @@
   }
 
   .Button__icon {
+    padding: 0.5rem 1rem;
+
     @include breakpoint-up(medium) {
       padding: 1rem 1.5rem;
     }
@@ -74,6 +83,18 @@
 
     &:hover {
       background-color: var(--icon-button);
+    }
+  }
+
+  &__loader {
+    width: 2rem;
+    span {
+      width: 2rem;
+      height: 2rem;
+  
+      &::before {
+        border-width: 3px;
+      }
     }
   }
 }

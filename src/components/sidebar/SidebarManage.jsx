@@ -11,7 +11,7 @@ const SidebarManage = () => {
       <ThemeToggle />
       <button 
         type="button" 
-        className="Sidebar__hideButton"
+        className="Sidebar__hide-sidebar"
         onClick={() => hideSidebar(dispatch)}
       >
         <IconHide />

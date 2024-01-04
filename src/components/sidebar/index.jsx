@@ -1,10 +1,7 @@
-import { useSelector } from 'react-redux';
 import SidebarManage from './SidebarManage';
 import SidebarBoardsList from './SidebarBoardsList';
 
-const Sidebar = () => {
-  const {sidebarIsVisible} = useSelector(store => store.global);
-
+const Sidebar = ({sidebarIsVisible}) => {
   return (
     <aside 
       className={sidebarIsVisible ? 'Sidebar Sidebar__is-visible' : 'Sidebar'}

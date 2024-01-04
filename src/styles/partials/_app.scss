@@ -1,0 +1,34 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.Main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bckg-strong);
+
+  &__show-sidebar {
+    position: absolute;
+    left: 0;
+    bottom: 1.875rem;
+    background-color: $purple-700;
+    width: 3.5rem;
+    height: 2.9375rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 50px 50px 0;
+    transition: $transition;
+
+    &:hover {
+      background-color: $purple-200;
+    }
+
+    svg path {
+      fill: $white;
+    } 
+  }
+}

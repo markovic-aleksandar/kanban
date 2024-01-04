@@ -1,13 +1,15 @@
 import { useSelector } from 'react-redux';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import Loader from '../Loader';
 import LogoDark from '../../assets/logo-dark.svg';
 import LogoLight from '../../assets/logo-light.svg';
 import LogoMobile from '../../assets/logo-mobile.svg';
 
 const NavbarBoards = () => {
-  const {currentTheme} = useSelector(store => store.global);
+  let {currentTheme, loader} = useSelector(store => store.global);
+  const {boards, currentBoard} = useSelector(store => store.board);
   const isMobile = useMediaQuery('mobile');
-
+  
   return (
     <div className="Boards">
       <div className="Boards__logo">
@@ -17,7 +19,15 @@ const NavbarBoards = () => {
           <img src={currentTheme === 'dark' ? LogoLight : LogoDark} alt="kanban" />
         )}
       </div>
-      <h1 className="Boards__title">Platform Launch</h1>
+      <div className="Boards__name">
+        {loader ? (
+          <Loader variant="Navbar" />
+        ) : (
+          <h1>
+            {boards.length < 1 ? 'No Board Found' : currentBoard?.name}
+          </h1>
+        )}
+      </div>
     </div>
   )
 }

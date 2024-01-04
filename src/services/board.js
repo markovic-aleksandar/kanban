@@ -6,10 +6,18 @@ import {
   UPDATE_BOARD,
   SET_CURRENT_BOARD
 } from '../store/slices/boardSlice';
+import { 
+  showSidebar,
+  showLoader, 
+  hideLoader 
+} from './global';
 import { addToStorage } from '../utils/index';
 
 // set boards
 export const setBoards = async dispatch => {
+  // show global loader
+  showLoader(dispatch);
+
   // get all boards
   const boards = await getDocuments(COLLECTION_BOARDS_ID);
   
@@ -22,6 +30,11 @@ export const setBoards = async dispatch => {
     dispatch(SET_BOARDS(boards));
     await setCurrentBoard(dispatch, currentBoard);
   }
+
+  // show sidebar
+  showSidebar(dispatch);
+  // hide loader
+  hideLoader(dispatch);
 }
 
 // set current board

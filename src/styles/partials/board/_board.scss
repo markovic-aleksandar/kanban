@@ -7,6 +7,7 @@
   left: 0;
   transition: $transition-layout;
 
+
   @include breakpoint-up(medium) {
     left: $sidebar-width;
   }
@@ -94,25 +95,27 @@
     }
   }
 
-  &__showButton {
-    display: none;
-    position: absolute;
-    left: 0;
-    bottom: 0.625rem;
-    background-color: $purple-700;
-    width: 3.5rem;
-    height: 2.9375rem;
-    justify-content: center;
+  &__no-column {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    border-radius: 0 50px 50px 0;
-    transition: $transition;
+    justify-content: center;
 
-    &:hover {
-      background-color: $purple-200;
+    p {
+      color: var(--title);
+      margin-bottom: 1rem;
     }
+  }
 
-    svg path {
-      fill: $white;
+  &__flex-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+
+    @include breakpoint-up(medium) {
+      width: calc(100vw - $sidebar-width);
     }
   }
 
@@ -123,6 +126,10 @@
 
     .Board__showButton {
       display: flex;
+    }
+
+    .Board__flex-content {
+      width: 100vw;
     }
   }
 }

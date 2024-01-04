@@ -1,4 +1,4 @@
-import { TOGGLE_THEME, TOGGLE_SIDEBAR_VISIBILITY } from '../store/slices/globalSlice';
+import { TOGGLE_THEME, TOGGLE_SIDEBAR_VISIBILITY, TOGGLE_LOADER } from '../store/slices/globalSlice';
 import { addToStorage } from '../utils';
 
 // toggle theme
@@ -19,4 +19,14 @@ export const showSidebar = dispatch => {
 // hide sidebar
 export const hideSidebar = dispatch => {
   dispatch(TOGGLE_SIDEBAR_VISIBILITY(false));
+}
+
+// show loader
+export const showLoader = dispatch => {
+  dispatch(TOGGLE_LOADER(true));
+}
+
+// hide loader
+export const hideLoader = dispatch => {
+  dispatch(TOGGLE_LOADER(false));
 }

@@ -5,14 +5,13 @@ const initialState = {
   currentBoard: null
 };
 
-// current board - sto se ovoga tice ja mislim da je najbolje da imamo jedan current board koji ce da sadrzi svoje columns a ti columns taskove koji ce imati sub-taskove tako da bi trebalo za svaku akciju koja ce ovde biti moguca kreirati ovaj reducers actions 
-
 const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
     SET_BOARDS: (state, action) => {
-      state.boards = action.payload;
+      // state.boards = action.payload;
+      state.boards = [];
     },
     ADD_BOARD: (state, action) => {
       state.boards = [...state.boards, action.payload];

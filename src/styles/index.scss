@@ -5,8 +5,10 @@
 @import './partials/variables';
 @import './partials/theme';
 @import './partials/global';
+@import './partials/app';
 
 // components
+@import './partials/loader';
 @import './partials/button';
 @import './partials/dropdown';
 @import './partials/theme-toggle';

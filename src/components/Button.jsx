@@ -21,5 +21,3 @@ export const ButtonIcon = ({type = 'button', variant = null, value, handleAction
     </button>
   )
 }
-
-// export const ButtonTab = () => {}

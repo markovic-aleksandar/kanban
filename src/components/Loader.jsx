@@ -1,6 +1,8 @@
-const Loader = () => {
+const Loader = ({variant}) => {
   return (
-    <div className="Loader">
+    <div 
+      className={variant ? `Loader ${variant}__loader` : 'Loader'}  
+    >
       <span></span>
     </div>
   )
