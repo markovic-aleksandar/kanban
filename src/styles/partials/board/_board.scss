@@ -25,6 +25,49 @@
     display: flex;
     flex-direction: column;
 
+    &-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: $gray-400;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    &-color {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 12px;
+      border-radius: 50%;
+
+      &--1 {
+        background-color: #49C4E5;
+      }
+
+      &--2 {
+        background-color: #8471F2;
+      }
+
+      &--3 {
+        background-color: #67E2AE;
+      }
+
+      &--4 {
+        background-color: #e5a449;
+      }
+
+      &--5 {
+        background-color: #2a3fdb;
+      }
+
+      &--6 {
+        background-color: #c36e6e;
+      }
+    }
+
     &-adding {
       position: relative;
       background: linear-gradient(to bottom,rgba(121,132,147,.2),rgba(130,143,163,.1),rgba(130,143,163,0));
@@ -52,26 +95,6 @@
           color: $purple-700;
         }
       }
-    }
-
-    &-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: $gray-400;
-      letter-spacing: 2.4px;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    &-color {
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      background-color: rgb(68, 255, 68);
-      margin-right: 12px;
-      border-radius: 50%;
     }
   }
 
@@ -122,10 +145,6 @@
   &__is-full {
     @include breakpoint-up(medium) {
       left: 0;
-    }
-
-    .Board__showButton {
-      display: flex;
     }
 
     .Board__flex-content {

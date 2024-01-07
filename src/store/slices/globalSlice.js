@@ -4,7 +4,8 @@ import { getFromStorage } from '../../utils';
 const initialState = {
   currentTheme: getFromStorage('theme') || 'dark',
   sidebarIsVisible: false,
-  loader: true
+  loader: true,
+  modal: {leave: null, enter: null}
 };
 
 const globalSlice = createSlice({
@@ -19,6 +20,15 @@ const globalSlice = createSlice({
     },
     TOGGLE_LOADER: (state, action) => {
       state.loader = action.payload;
+    },
+    SHOW_MODAL: (state, action) => {
+      state.modal = {leave: null, enter: action.payload};
+    },
+    HIDE_MODAL: state => {
+      state.modal = {leave: null, enter: state.modal.enter};
+    },
+    SWITCH_MODAL: (state, action) => {
+      state.modal = {leave: state.modal.enter, enter: action.payload || null};
     }
   }
 });
@@ -26,7 +36,10 @@ const globalSlice = createSlice({
 export const {
   TOGGLE_THEME,
   TOGGLE_SIDEBAR_VISIBILITY,
-  TOGGLE_LOADER
+  TOGGLE_LOADER,
+  SHOW_MODAL,
+  HIDE_MODAL,
+  SWITCH_MODAL
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

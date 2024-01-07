@@ -17,7 +17,10 @@ const NavbarManage = () => {
 
   return (
     <div className="Manage">
-      <ButtonIcon variant="main" value={isMobile ? '' : 'Add New task'}>
+      <ButtonIcon 
+        variant="Button__main" 
+        value={isMobile ? '' : 'Add New task'}
+      >
         <IconPlus />
       </ButtonIcon>
       

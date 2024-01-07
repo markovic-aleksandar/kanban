@@ -1,22 +1,50 @@
 .Button, .Button__icon {
   display: inline-block;
   font-size: 0.9375rem;
-  padding: 1rem 1.5rem;
   font-weight: 700;
+  height: 3rem;
+  line-height: 1.5;
+  padding: 1rem 1.5rem;
   border-radius: 50px;
   transition: $transition;
 
-  &.Button__icon {
-    display: flex;
-    align-items: center;
-    column-gap: 5px;
+  &__small {
+    font-size: 0.8125rem;
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+
+    svg {
+      transform: scale(0.8);
+    }
+  }
+  
+  &__full {
+    width: 100%;
+    text-align: center;
   }
 
   &__main {
     color: $white;
     background-color: $purple-700;
+    
     &:hover {
       background-color: $purple-200;
+    }  
+  }
+
+  &__light {
+    color: $purple-700;
+    background-color: var(--btn-light);
+
+    &:hover {
+      opacity: 0.9;
     }
   }
+}
+
+.Button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 5px;
 }

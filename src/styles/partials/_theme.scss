@@ -1,26 +1,35 @@
 $--bckg-strong: --bckg-strong;
 $--bckg-weak: --bckg-weak;
 $--title: --title;
+$--sub-title: --sub-title;
+$--btn-light: --btn-light;
 $--border-line: --border-line;
 $--dropdown: --dropdown;
 $--icon-button: --icon-button;
+$--checked: --checked;
 
 $theme-map-light: (
   $--bckg-strong: $gray-200,
   $--bckg-weak: $white,
   $--title: $dark-700,
+  $--sub-title: $gray-400,
+  $--btn-light: $gray-250,
   $--border-line: $gray-300,
   $--dropdown: $white,
-  $--icon-button: $gray-300
+  $--icon-button: $gray-300,
+  $--checked: rgba(0, 0, 0, 0.5)
 );
 
 $theme-map-dark: (
   $--bckg-strong: $dark-500,
   $--bckg-weak: $dark-400,
   $--title: $white,
+  $--sub-title: $white,
+  $--btn-light: $white,
   $--border-line: $dark-300,
   $--dropdown: $dark-500,
-  $--icon-button: $dark-500
+  $--icon-button: $dark-500,
+  $--checked: rgba(255, 255, 255, 0.5)
 );
 
 @mixin spread-map($map: ()) {

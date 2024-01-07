@@ -1,7 +1,7 @@
 import BoardTask from './BoardTask';
 import { IconPlus } from '../../constants/icons';
 
-const BoardColumn = ({isAdding}) => {
+const BoardColumn = ({currentColumn, currentColumnIndex, isAdding}) => {
   return (
     <div className={isAdding ? 'Board__column Board__column-adding' : 'Board__column'}>
       {isAdding ? (
@@ -11,11 +11,15 @@ const BoardColumn = ({isAdding}) => {
       ) : (
         <>
           <div className="Board__column-title">
-            <span className="Board__column-color" />
-            <span>Todo (5)</span>
+            <span className={`Board__column-color Board__column-color--${currentColumnIndex}`} />
+            <span>{currentColumn.name} ({currentColumn.tasks.length})</span>
           </div>
           <div className="Board__tasks">
-            <BoardTask />
+            {currentColumn.tasks.map(task => {
+              return (
+                <BoardTask key={task.$id} currentTask={task} />
+              )
+            })}
           </div>
         </>
       )}

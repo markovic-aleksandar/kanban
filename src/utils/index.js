@@ -26,3 +26,14 @@ export const formatDatabaseQueries = (Query, queryOptions) => {
   
   return queries;
 }
+
+// delay to handle 
+export const delayToHandle = (delayFunction, delayValue) => {
+  return new Promise(resolve => {
+    const delayTimeout = setTimeout(() => {
+      clearTimeout(delayTimeout);
+      delayFunction();
+      resolve();
+    }, delayValue);
+  });
+}

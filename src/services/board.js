@@ -43,10 +43,10 @@ const setCurrentBoard = async (dispatch, currentBoard) => {
   currentBoard.columns = await getBoardColumns(currentBoard);
   
 
-  // set current board(state)
+  // set current board (state)
   dispatch(SET_CURRENT_BOARD(currentBoard));
-  // set current board (local storage)
-  addToStorage('current-board', currentBoard);
+  // set current board id (local storage)
+  addToStorage('current-board-id', currentBoard.$id);
 }
 
 // get current board columns

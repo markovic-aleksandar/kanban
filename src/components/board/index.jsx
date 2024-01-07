@@ -1,12 +1,14 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { showModal } from '../../services/modal';
 import Loader from '../Loader';
 import { ButtonIcon } from '../Button';
 import BoardColumn from './BoardColumn';
 import { IconPlus } from '../../constants/icons';
 
 const Board = () => {
-  let {sidebarIsVisible, loader} = useSelector(store => store.global);
-  const { boards } = useSelector(store => store.board);
+  const {sidebarIsVisible, loader} = useSelector(store => store.global);
+  const {boards, currentBoard} = useSelector(store => store.board);
+  const dispatch = useDispatch();
 
   return (
     <div 
@@ -17,15 +19,23 @@ const Board = () => {
           <Loader />
         </div>
       ) : (
-        boards.length > 0 ? (
+        boards.length > 0 && currentBoard ? (
           <div className="Board__columns">
-            <BoardColumn />
+            {currentBoard.columns.map((column, index) => {
+              return (
+                <BoardColumn key={column.$id} currentColumn={column} currentColumnIndex={index + 1} />
+              )
+            })}
             <BoardColumn isAdding={true} />
           </div>
         ) : (
           <div className=" Board__flex-content Board__no-column">
             <p>No board found. Create a new board to get started.</p>
-            <ButtonIcon variant="main" value="Create New Board">
+            <ButtonIcon 
+              variant="Button__main" 
+              value="Create New Board"
+              handleAction={() => showModal(dispatch, 'add-board')}  
+            >
               <IconPlus />
             </ButtonIcon>
           </div>

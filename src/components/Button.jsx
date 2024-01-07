@@ -1,8 +1,8 @@
-export const Button = ({type = 'button', variant = null, value, handleAction = null}) => {
+export const Button = ({type = 'button', variant, value, handleAction}) => {
   return (
     <button
       type={type}
-      className={variant ? `Button Button__${variant}` : 'Button'}
+      className={variant ? `Button ${variant}` : 'Button'}
       onClick={handleAction ? handleAction : null}
     >
       {value}
@@ -10,11 +10,11 @@ export const Button = ({type = 'button', variant = null, value, handleAction = n
   )
 }
 
-export const ButtonIcon = ({type = 'button', variant = null, value, handleAction, children}) => {
+export const ButtonIcon = ({type = 'button', variant, value, handleAction, children}) => {
   return (
     <button
       type={type}
-      className={variant ? `Button__icon Button__icon__${variant}` : 'Button__icon'}
+      className={variant ? `Button__icon ${variant}` : 'Button__icon'}
       onClick={handleAction ? handleAction : null}
     >
       {children} {value}

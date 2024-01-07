@@ -1,28 +1,24 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IconBoard } from '../../constants/icons';
 
 const SidebarBoardsList = () => {
-  const {boards} = useSelector(store => store.board);
-
-  useEffect(() => {
-    console.log('coa');
-  });
+  const {boards, currentBoard} = useSelector(store => store.board);
 
   return (
     <div className="BoardsList">
       <p className="BoardsList__count">All boards ({boards.length})</p>
       <div className="BoardsList__tabs">
         {boards.map(board => {
-          console.log(board);
+          const {$id, name} = board;
+          const isActive = $id === currentBoard?.$id;
           return (
             <button 
-              key={board.$id}
-              type="button" 
-              className="BoardsList__tab BoardsList__tab--active"
+              key={$id}
+              type="button"
+              className={isActive ? 'BoardsList__tab BoardsList__tab--active' : 'BoardsList__tab'}
             >
-              <IconBoard color="#828fa3" />
-              {board.name}
+              <IconBoard />
+              {name}
             </button>    
           )
         })}

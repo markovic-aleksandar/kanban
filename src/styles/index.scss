@@ -10,6 +10,7 @@
 // components
 @import './partials/loader';
 @import './partials/button';
+@import './partials/form';
 @import './partials/dropdown';
 @import './partials/theme-toggle';
 
@@ -22,3 +23,6 @@
 
 // board
 @import './partials/board/board';
+
+// modal
+@import './partials/modal';

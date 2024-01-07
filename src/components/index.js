@@ -8,7 +8,12 @@ export { default as ThemeToggle } from './ThemeToggle';
 
 // navbar
 export { default as Navbar } from './navbar';
+
 // sidebar
 export { default as Sidebar } from './sidebar';
+
 // board
 export { default as Board } from './board';
+
+// modal
+export { default as Modal } from './modals';
