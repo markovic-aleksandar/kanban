@@ -1,8 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { showModal } from '../../services/modal';
 import { IconBoard } from '../../constants/icons';
 
 const SidebarBoardsList = () => {
   const {boards, currentBoard} = useSelector(store => store.board);
+  const dispatch = useDispatch();
 
   return (
     <div className="BoardsList">
@@ -22,7 +24,11 @@ const SidebarBoardsList = () => {
             </button>    
           )
         })}
-        <button type="button" className="BoardsList__create">
+        <button 
+          type="button" 
+          className="BoardsList__create"
+          onClick={() => showModal(dispatch, 'add-board')}  
+        >
           <IconBoard />
           + Create New Board
         </button>

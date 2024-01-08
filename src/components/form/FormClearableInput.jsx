@@ -1,25 +1,49 @@
+import { useEffect, useRef } from 'react';
 import { IconClose } from '../../constants/icons';
 
-const FormClearableInput = ({label, inputs}) => {
+const FormClearableInput = ({label, inputs, handleChange, handleRemove}) => {
+  const clearableInputsRef = useRef(null);
+
+  // handle make focus on new created input
+  useEffect(() => {
+    if (inputs.length <= 1) return;
+
+    // set focus on new created input
+    clearableInputsRef.current.querySelectorAll('input')[inputs.length - 1].focus();
+  }, [inputs.length]);
+
   return (
     <div className="Form FormClearableInput">
       <label className="Form__label">{label}</label>
-      <div className="FormClearableInput__inputs">
-        <div className="FormClearableInput__input">
-          <div className="Form__input-holder">
-            <input 
-              type="text" 
-              name="test"
-              className="Form__input"
-              value="Test"
-              onChange={() => {}}
-            />
-            {/* {error && <span className="Form__error">{error}</span>} */}
-          </div>
-          <button type="button" className="FormClearableInput__input-remove">
-            <IconClose />
-          </button>
-        </div>
+      <div ref={clearableInputsRef} className="FormClearableInput__inputs">
+        {inputs.map((input, index) => {
+          const {value, error} = input;
+          return (
+            <div 
+              key={index} 
+              className={error ? 'FormClearableInput__input Form__input-error' : 'FormClearableInput__input'}
+            >
+              <div className="Form__input-holder">
+                <input 
+                  type="text"
+                  name={`${label}-${index}`}
+                  className="Form__input"
+                  value={value}
+                  onChange={e => handleChange({name: label, value: e.target.value, index})}
+                />
+                {error && <span className="Form__error">{error}</span>}
+              </div>
+              {inputs.length > 1 && (
+                <button 
+                  type="button" 
+                  className="FormClearableInput__input-remove"
+                  onClick={() => handleRemove(label, index)}
+                >
+                  <IconClose />
+                </button>)}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

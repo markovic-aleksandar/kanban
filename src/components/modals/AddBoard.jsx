@@ -1,34 +1,51 @@
+import { useSelector } from 'react-redux';
+import useFormControl from '../../hooks/useFormControl';
 import FormInput from '../form/FormInput';
 import FormClearableInput from '../form/FormClearableInput';
-import FormCheckbox from '../form/FormCheckbox';
 import { Button, ButtonIcon } from '../Button';
 import { IconPlus } from '../../constants/icons';
 
 const AddBoard = () => {
+  const {boards} = useSelector(store => store.board);
+  const {formData, handleChangeFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
+    name: {label: 'name', value: '', error: false, isRequired: true, isUnique: boards},
+    columns: {label: 'columns', value: [
+      {value: '', error: false}
+    ], isRequired: true, isUnique: true}
+  });
+
   return (
     <>
       <div className="Modal__content-box">
-        <FormInput 
+        <FormInput
           type="text"
-          name="name"
-          label="Name"
-          value="Platform Launch"
-          error="Required"
+          name={formData.name.label}
+          label={formData.name.label}
+          value={formData.name.value}
+          error={formData.name.error}
+          handleChange={handleChangeFormData}
         />
       </div>
 
       <div className="Modal__content-box">
-        <FormClearableInput label="Columns" />
+        <FormClearableInput
+          label={formData.columns.label}
+          inputs={formData.columns.value}
+          handleChange={handleChangeFormData}
+          handleRemove={handleRemoveClearableInput}
+        />
       </div>
 
       <div className="Modal__content-box">
-        <FormCheckbox label="Subtasks" />
-      </div>
-
-      <div className="Modal__content-box">
-        <ButtonIcon variant="Button__small Button__full Button__light" value="Add New Column">
-          <IconPlus />
-        </ButtonIcon>
+        {formData.columns.value.length < 6 && (
+          <ButtonIcon 
+            variant="Button__small Button__full Button__light" 
+            value="Add New Column"
+            handleAction={() => handleAddClearableInput(formData.columns.label)} 
+          >
+            <IconPlus />
+          </ButtonIcon>
+        )}
       </div>
 
       <div className="Modal__content-box">
