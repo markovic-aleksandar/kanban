@@ -48,7 +48,7 @@ const AddBoard = () => {
         <Button 
           variant="Button__small Button__full Button__main" 
           value="Create New Board" 
-          handleAction={handleValidateFormData}  
+          handleAction={() => handleValidateFormData(() => console.log('Sve u redu!'))}  
         />
       </div>
     </>

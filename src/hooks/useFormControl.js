@@ -140,6 +140,9 @@ const useFormControl = initialData => {
     }
 
     setFormData(tempDataItems);
+
+    // call handleAction function if form data errors don't exist
+    if (formDataErrors <= 0) handleAction();
   }
 
   // handle add clearable input
