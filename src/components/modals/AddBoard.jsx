@@ -7,11 +7,11 @@ import { IconPlus } from '../../constants/icons';
 
 const AddBoard = () => {
   const {boards} = useSelector(store => store.board);
-  const {formData, handleChangeFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
+  const {formData, handleChangeFormData, handleValidateFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
     name: {label: 'name', value: '', error: false, isRequired: true, isUnique: boards},
     columns: {label: 'columns', value: [
-      {value: '', error: false}
-    ], isRequired: true, isUnique: true}
+      {value: '', error: false} // mozda ako ne dodas ni jedan pocetni da u okviru samog custom hook-a kreiras ovo, a ako ne dodas nista samo value da bude prazan array
+    ], isRequired: true, isUnique: true, isFocusable: true}
   });
 
   return (
@@ -19,18 +19,14 @@ const AddBoard = () => {
       <div className="Modal__content-box">
         <FormInput
           type="text"
-          name={formData.name.label}
-          label={formData.name.label}
-          value={formData.name.value}
-          error={formData.name.error}
+          data={formData.name}
           handleChange={handleChangeFormData}
         />
       </div>
 
       <div className="Modal__content-box">
         <FormClearableInput
-          label={formData.columns.label}
-          inputs={formData.columns.value}
+          data={formData.columns}
           handleChange={handleChangeFormData}
           handleRemove={handleRemoveClearableInput}
         />
@@ -49,7 +45,11 @@ const AddBoard = () => {
       </div>
 
       <div className="Modal__content-box">
-        <Button variant="Button__small Button__full Button__main" value="Create New Board" />
+        <Button 
+          variant="Button__small Button__full Button__main" 
+          value="Create New Board" 
+          handleAction={handleValidateFormData}  
+        />
       </div>
     </>
   )

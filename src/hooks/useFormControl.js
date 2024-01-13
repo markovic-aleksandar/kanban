@@ -12,36 +12,134 @@ const useFormControl = initialData => {
     // update form data with new values
     setFormData(prevData => {
       const currentData = prevData[name];
+
       // check if current name is array
       if (Array.isArray(currentData.value)) {
-        const dataItems = currentData.value.map((dataItem, index) => {
-          if (index === nameIndex) return {...dataItem, value, error: handleErrorSingleFormData({value, index, isRequired: currentData.isRequired, isUnique: currentData.value}, true)};
+        let tempCurrentData = {...currentData};
 
+        // update value for specific data item
+        tempCurrentData.value = tempCurrentData.value.map((dataItem, index) => {
+          if (index === nameIndex) return {...dataItem, value};
           return dataItem;
         });
-        
-        return {...prevData, [name]: {...currentData, value: dataItems}};
+
+        // add current data as a unique param after the value updated
+        tempCurrentData.isUnique = [...tempCurrentData.value];
+
+        // check for errors        
+        tempCurrentData = validateDataItem(tempCurrentData, true, nameIndex);
+
+        return {...prevData, [name]: tempCurrentData};
       } else {
-        return {...prevData, [name]: {...currentData, value, error: handleErrorSingleFormData({...currentData, value})}}
+        let tempCurrentData = {...currentData, value};
+
+        // check for errors
+        tempCurrentData = validateDataItem(tempCurrentData);
+
+        return {...prevData, [name]: tempCurrentData};
       }
     });
   }
 
-  // handle error single form data
-  const handleErrorSingleFormData = (dataItem, isNested) => {
-    const {label, value, index, isRequired, isUnique} = dataItem;
-
-    // check if data is required
-    if (isRequired && !value.trim()) return 'Required';
-
-    // check if data is unique
-    if (isUnique) {
-      const isUsed = isNested ? isUnique.find((valueItem, valueIndex) => valueItem.value.toLowerCase() === value.toLowerCase() && valueIndex !== index) : isUnique.find(valueItem => valueItem[label].toLowerCase() === value.toLowerCase());
-      
-      if (isUsed) return 'Used';
+  // validate specific data param
+  const validateSpecificDataParam = (checkParams, dataItem) => {
+    // required
+    if (checkParams.name === 'required' && !dataItem.value.trim()) {
+      return {...dataItem, error: 'Required'};
     }
 
-    return false;
+    // unique
+    if (checkParams.name === 'unique') {
+      const dataItemIsNoUnique = checkParams.isNested ?
+      checkParams.uniqueItems.find((uniqueItem, uniqueIndex) => uniqueItem.value.toLowerCase() === dataItem.value.toLowerCase() && uniqueIndex !== checkParams.isNested.index && uniqueItem.value.trim()) : checkParams.uniqueItems.find(uniqueItem => uniqueItem[dataItem.label].toLowerCase() === dataItem.value.toLowerCase());
+
+      if (dataItemIsNoUnique) return {...dataItem, error: 'Used'};
+    }
+
+    return null;
+  }
+
+  // valdiate data item
+  const validateDataItem = (dataItem, isNested, currentIndex) => {
+    // check if current data item is nested
+    if (isNested) {
+      let tempDataItem = null;
+      const dataItemGroup = {};
+      tempDataItem = dataItem.value.map((dataItemValue, dataItemIndex) => {
+        // check for required
+        if (dataItem.isRequired) {
+          const validatedDataItem = validateSpecificDataParam({name: 'required'}, dataItemValue);
+
+          // check require for single data item value change
+          if (currentIndex === dataItemIndex && validatedDataItem) return validatedDataItem;
+
+          // check require for all data items
+          if (!currentIndex && currentIndex !== 0 && validatedDataItem) return validatedDataItem;
+        }
+
+        // check for unique
+        if (dataItem.isUnique) {
+          const validatedDataItem = validateSpecificDataParam({
+            name: 'unique',
+            isNested: {index: dataItemIndex},
+            uniqueItems: dataItem.isUnique
+          }, dataItemValue);
+
+          if (validatedDataItem) {
+            if (dataItemGroup[validatedDataItem.value]) return validatedDataItem;
+            dataItemGroup[validatedDataItem.value] = true;
+          }
+        }
+
+        return {...dataItemValue, error: dataItemValue.error === 'Required' && dataItemIndex !== currentIndex ? 'Required' : false};
+      });
+
+      return {...dataItem, value: tempDataItem};
+    } else {
+      // check for required
+      if (dataItem.isRequired) {
+        const validatedDataItem = validateSpecificDataParam({name: 'required'}, dataItem);
+        if (validatedDataItem) return validatedDataItem;
+      }
+
+      // check for unique
+      if (dataItem.isUnique) {
+        const validatedDataItem = validateSpecificDataParam({
+          name: 'unique',
+          uniqueItems: dataItem.isUnique
+        }, dataItem);
+
+        if (validatedDataItem) return validatedDataItem;
+      }
+
+      return {...dataItem, error: false};
+    }
+  }
+
+  const handleValidateFormData = handleAction => {
+    const tempDataItems = {...formData};
+    let formDataErrors = 0;
+
+    for (const tempDataItem in tempDataItems) {
+      const currentTempDataItem = tempDataItems[tempDataItem];
+      const isNested = Array.isArray(currentTempDataItem.value);
+      const validatedDataItem = isNested ? validateDataItem({...currentTempDataItem, isUnique: currentTempDataItem.value}, true) : validateDataItem(currentTempDataItem);
+      tempDataItems[tempDataItem] = validatedDataItem;
+
+      // count errors
+      if (isNested) {
+        for (let i = 0; i < validatedDataItem.value.length; i++) {
+          if (validatedDataItem.value[i].error) {
+            formDataErrors++;
+            break;
+          }
+        }
+      } else {
+        if (validatedDataItem.error) formDataErrors++;
+      }
+    }
+
+    setFormData(tempDataItems);
   }
 
   // handle add clearable input
@@ -55,7 +153,11 @@ const useFormControl = initialData => {
       // add new input
       return {
         ...prevData,
-        [key]: {...prevData[key], value: [...prevData[key].value, {value: '', error: false}]}
+        [key]: {
+          ...prevData[key], 
+          value: [...prevData[key].value, {value: '', error: false}],
+          isFocusable: prevData[key].isFocusable ? 'inc' : false
+        }
       }      
     });
   }
@@ -67,11 +169,29 @@ const useFormControl = initialData => {
       if (prevData[key].value.length <= 1) {
         return prevData;
       }
+      
+      const currentPrevData = prevData[key];
+      // init temp data and set required to false
+      let tempData = {...currentPrevData, isRequired: false};
 
-      // remove current input
+      // remove specific
+      tempData.value = tempData.value.filter((_, valueIndex) => valueIndex !== index);
+
+      // set unique value to value after remove
+      tempData.isUnique = tempData.value;
+
+      // validate temp data after remove
+      tempData = validateDataItem(tempData, true);
+
+      // return required after unique validation
+      tempData.isRequired = currentPrevData.isRequired;
+      
       return {
         ...prevData,
-        [key]: {...prevData[key], value: prevData[key].value.filter((_, dataItemIndex) => dataItemIndex !== index)}
+        [key]: {
+          ...tempData,
+          isFocusable: tempData.isFocusable ? 'dec' : false
+        }
       }
     });
   }
@@ -79,6 +199,7 @@ const useFormControl = initialData => {
   return {
     formData,
     handleChangeFormData,
+    handleValidateFormData,
     handleAddClearableInput,
     handleRemoveClearableInput
   }

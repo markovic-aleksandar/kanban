@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { IconClose } from '../../constants/icons';
 
-const FormClearableInput = ({label, inputs, handleChange, handleRemove}) => {
+const FormClearableInput = ({data, handleChange, handleRemove}) => {
+  const {label, value: inputs, isFocusable} = data;
   const clearableInputsRef = useRef(null);
 
   // handle make focus on new created input
   useEffect(() => {
-    if (inputs.length <= 1) return;
+    if (inputs.length <= 1 || isFocusable !== 'inc') return;
 
     // set focus on new created input
     clearableInputsRef.current.querySelectorAll('input')[inputs.length - 1].focus();
-  }, [inputs.length]);
+  }, [inputs.length, isFocusable]);
 
   return (
     <div className="Form FormClearableInput">
