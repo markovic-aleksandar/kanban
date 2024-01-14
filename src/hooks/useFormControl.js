@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const useFormControl = initialData => {
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState(formatInitialData(initialData));
 
   // handle change form data
   const handleChangeFormData = prop => {
@@ -24,7 +24,7 @@ const useFormControl = initialData => {
         });
 
         // add current data as a unique param after the value updated
-        tempCurrentData.isUnique = [...tempCurrentData.value];
+        if (currentData.isUnique) tempCurrentData.isUnique = [...tempCurrentData.value];
 
         // check for errors        
         tempCurrentData = validateDataItem(tempCurrentData, true, nameIndex);
@@ -41,81 +41,6 @@ const useFormControl = initialData => {
     });
   }
 
-  // validate specific data param
-  const validateSpecificDataParam = (checkParams, dataItem) => {
-    // required
-    if (checkParams.name === 'required' && !dataItem.value.trim()) {
-      return {...dataItem, error: 'Required'};
-    }
-
-    // unique
-    if (checkParams.name === 'unique') {
-      const dataItemIsNoUnique = checkParams.isNested ?
-      checkParams.uniqueItems.find((uniqueItem, uniqueIndex) => uniqueItem.value.toLowerCase() === dataItem.value.toLowerCase() && uniqueIndex !== checkParams.isNested.index && uniqueItem.value.trim()) : checkParams.uniqueItems.find(uniqueItem => uniqueItem[dataItem.label].toLowerCase() === dataItem.value.toLowerCase());
-
-      if (dataItemIsNoUnique) return {...dataItem, error: 'Used'};
-    }
-
-    return null;
-  }
-
-  // valdiate data item
-  const validateDataItem = (dataItem, isNested, currentIndex) => {
-    // check if current data item is nested
-    if (isNested) {
-      let tempDataItem = null;
-      const dataItemGroup = {};
-      tempDataItem = dataItem.value.map((dataItemValue, dataItemIndex) => {
-        // check for required
-        if (dataItem.isRequired) {
-          const validatedDataItem = validateSpecificDataParam({name: 'required'}, dataItemValue);
-
-          // check require for single data item value change
-          if (currentIndex === dataItemIndex && validatedDataItem) return validatedDataItem;
-
-          // check require for all data items
-          if (!currentIndex && currentIndex !== 0 && validatedDataItem) return validatedDataItem;
-        }
-
-        // check for unique
-        if (dataItem.isUnique) {
-          const validatedDataItem = validateSpecificDataParam({
-            name: 'unique',
-            isNested: {index: dataItemIndex},
-            uniqueItems: dataItem.isUnique
-          }, dataItemValue);
-
-          if (validatedDataItem) {
-            if (dataItemGroup[validatedDataItem.value]) return validatedDataItem;
-            dataItemGroup[validatedDataItem.value] = true;
-          }
-        }
-
-        return {...dataItemValue, error: dataItemValue.error === 'Required' && dataItemIndex !== currentIndex ? 'Required' : false};
-      });
-
-      return {...dataItem, value: tempDataItem};
-    } else {
-      // check for required
-      if (dataItem.isRequired) {
-        const validatedDataItem = validateSpecificDataParam({name: 'required'}, dataItem);
-        if (validatedDataItem) return validatedDataItem;
-      }
-
-      // check for unique
-      if (dataItem.isUnique) {
-        const validatedDataItem = validateSpecificDataParam({
-          name: 'unique',
-          uniqueItems: dataItem.isUnique
-        }, dataItem);
-
-        if (validatedDataItem) return validatedDataItem;
-      }
-
-      return {...dataItem, error: false};
-    }
-  }
-
   const handleValidateFormData = handleAction => {
     const tempDataItems = {...formData};
     let formDataErrors = 0;
@@ -123,7 +48,7 @@ const useFormControl = initialData => {
     for (const tempDataItem in tempDataItems) {
       const currentTempDataItem = tempDataItems[tempDataItem];
       const isNested = Array.isArray(currentTempDataItem.value);
-      const validatedDataItem = isNested ? validateDataItem({...currentTempDataItem, isUnique: currentTempDataItem.value}, true) : validateDataItem(currentTempDataItem);
+      const validatedDataItem = isNested ? validateDataItem({...currentTempDataItem}, true) : validateDataItem(currentTempDataItem);
       tempDataItems[tempDataItem] = validatedDataItem;
 
       // count errors
@@ -181,7 +106,7 @@ const useFormControl = initialData => {
       tempData.value = tempData.value.filter((_, valueIndex) => valueIndex !== index);
 
       // set unique value to value after remove
-      tempData.isUnique = tempData.value;
+      if (currentPrevData.isUnique) tempData.isUnique = tempData.value;
 
       // validate temp data after remove
       tempData = validateDataItem(tempData, true);
@@ -205,6 +130,103 @@ const useFormControl = initialData => {
     handleValidateFormData,
     handleAddClearableInput,
     handleRemoveClearableInput
+  }
+}
+
+// format initial data
+const formatInitialData = initialData => {
+  const tempInitialData = {...initialData};
+
+  for (const prop in tempInitialData) {
+    const currentData = tempInitialData[prop];
+    // check if current data value is array
+    if (Array.isArray(currentData.value)) {
+      // check if current data value is empty array
+      if (currentData.value.length === 0) {
+        currentData.value = [{value: '', error: false}];
+      }
+
+      // check if current data is unique
+      if (currentData.isUnique) currentData.isUnique = [...currentData.value];
+    }
+
+    tempInitialData[prop] = {...currentData};
+  }
+  return tempInitialData;
+}
+
+// validate specific data param
+const validateSpecificDataParam = (checkParams, dataItem) => {
+  // required
+  if (checkParams.name === 'required' && !dataItem.value.trim()) {
+    return {...dataItem, error: 'Required'};
+  }
+
+  // unique
+  if (checkParams.name === 'unique') {
+    const dataItemIsNoUnique = checkParams.isNested ?
+    checkParams.uniqueItems.find((uniqueItem, uniqueIndex) => uniqueItem.value.toLowerCase().trim() === dataItem.value.toLowerCase().trim() && uniqueIndex !== checkParams.isNested.index && uniqueItem.value.trim()) : checkParams.uniqueItems.find(uniqueItem => uniqueItem[dataItem.label].toLowerCase().trim() === dataItem.value.toLowerCase().trim());
+
+    if (dataItemIsNoUnique) return {...dataItem, error: 'Used'};
+  }
+
+  return null;
+}
+
+// valdiate data item
+const validateDataItem = (dataItem, isNested, currentIndex) => {
+  // check if current data item is nested
+  if (isNested) {
+    let tempDataItem = null;
+    const dataItemGroup = {};
+    tempDataItem = dataItem.value.map((dataItemValue, dataItemIndex) => {
+      // check for required
+      if (dataItem.isRequired) {
+        const validatedDataItem = validateSpecificDataParam({name: 'required'}, dataItemValue);
+
+        // check require for single data item value change
+        if (currentIndex === dataItemIndex && validatedDataItem) return validatedDataItem;
+
+        // check require for all data items
+        if (!currentIndex && currentIndex !== 0 && validatedDataItem) return validatedDataItem;
+      }
+
+      // check for unique
+      if (dataItem.isUnique) {
+        const validatedDataItem = validateSpecificDataParam({
+          name: 'unique',
+          isNested: {index: dataItemIndex},
+          uniqueItems: dataItem.isUnique
+        }, dataItemValue);
+
+        if (validatedDataItem) {
+          if (dataItemGroup[validatedDataItem.value]) return validatedDataItem;
+          dataItemGroup[validatedDataItem.value] = true;
+        }
+      }
+
+      return {...dataItemValue, error: dataItemValue.error === 'Required' && dataItemIndex !== currentIndex ? 'Required' : false};
+    });
+
+    return {...dataItem, value: tempDataItem};
+  } else {
+    // check for required
+    if (dataItem.isRequired) {
+      const validatedDataItem = validateSpecificDataParam({name: 'required'}, dataItem);
+      if (validatedDataItem) return validatedDataItem;
+    }
+
+    // check for unique
+    if (dataItem.isUnique) {
+      const validatedDataItem = validateSpecificDataParam({
+        name: 'unique',
+        uniqueItems: dataItem.isUnique
+      }, dataItem);
+
+      if (validatedDataItem) return validatedDataItem;
+    }
+
+    return {...dataItem, error: false};
   }
 }
 

@@ -9,9 +9,7 @@ const AddBoard = () => {
   const {boards} = useSelector(store => store.board);
   const {formData, handleChangeFormData, handleValidateFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
     name: {label: 'name', value: '', error: false, isRequired: true, isUnique: boards},
-    columns: {label: 'columns', value: [
-      {value: '', error: false} // mozda ako ne dodas ni jedan pocetni da u okviru samog custom hook-a kreiras ovo, a ako ne dodas nista samo value da bude prazan array
-    ], isRequired: true, isUnique: true, isFocusable: true}
+    columns: {label: 'columns', value: [], isRequired: true, isUnique: true, isFocusable: true}
   });
 
   return (
