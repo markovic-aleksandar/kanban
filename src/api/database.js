@@ -1,4 +1,4 @@
-import { Query } from 'appwrite';
+import { ID, Query } from 'appwrite';
 import { DATABASE_ID, database } from '../appwriteConfig';
 import { formatDatabaseQueries } from '../utils';
 
@@ -12,19 +12,18 @@ export const getDocuments = async (collectionID, queryOptions = null) => {
 
     return responseData;
   }
-  catch (err) {
-    console.log(err);
+  catch (error) {
+    throw new Error(error);
   }
 }
 
 // add document to specific collection
 export const addDocument = async (collectionID, document) => {
   try {
-    const response = await database.createDocument(DATABASE_ID, collectionID, '3213214325345', document);
-
-    console.log(response);
+    const responseData = await database.createDocument(DATABASE_ID, collectionID, ID.unique(), document);
+    return responseData;
   }
-  catch(err) {
-    console.log(err);
+  catch (error) {
+    throw new Error(error);
   }
 }

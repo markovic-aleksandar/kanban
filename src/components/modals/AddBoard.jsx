@@ -1,5 +1,6 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useFormControl from '../../hooks/useFormControl';
+import { addNewBoard } from '../../services/board';
 import FormInput from '../form/FormInput';
 import FormClearableInput from '../form/FormClearableInput';
 import { Button, ButtonIcon } from '../Button';
@@ -11,6 +12,14 @@ const AddBoard = () => {
     name: {label: 'name', value: '', error: false, isRequired: true, isUnique: boards},
     columns: {label: 'columns', value: [], isRequired: true, isUnique: true, isFocusable: true}
   });
+  const dispatch = useDispatch();
+
+  // handle add board
+  const handleAddBoard = () => {
+    handleValidateFormData(() => {
+      addNewBoard(dispatch, formData);
+    });
+  }
 
   return (
     <>
@@ -46,7 +55,7 @@ const AddBoard = () => {
         <Button 
           variant="Button__small Button__full Button__main" 
           value="Create New Board" 
-          handleAction={() => handleValidateFormData(() => console.log('Sve u redu!'))}  
+          handleAction={handleAddBoard}  
         />
       </div>
     </>

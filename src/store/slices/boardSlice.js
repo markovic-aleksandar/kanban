@@ -27,6 +27,9 @@ const boardSlice = createSlice({
     },
     SET_CURRENT_BOARD: (state, action) => {
       state.currentBoard = action.payload;
+    },
+    SET_CURRENT_BOARD_COLUMNS: (state, action) => {
+      
     }
   }
 });

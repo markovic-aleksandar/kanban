@@ -1,5 +1,5 @@
 import { COLLECTION_BOARDS_ID, COLLECTION_COLUMNS_ID, COLLECTION_TASKS_ID } from '../appwriteConfig';
-import { getDocuments } from '../api/database';
+import { getDocuments, addDocument } from '../api/database';
 import { 
   SET_BOARDS,
   ADD_BOARD,
@@ -11,6 +11,7 @@ import {
   showLoader, 
   hideLoader 
 } from './global';
+import { getColumns, addColumns, manageColumns } from './column';
 import { addToStorage } from '../utils/index';
 
 // set boards
@@ -26,8 +27,9 @@ export const setBoards = async dispatch => {
     // check for the current board inside local storage otherwise use the first board from a list
     const currentBoard = {...boards[0]};
     
-    // set boards (state)
+    // set boards
     dispatch(SET_BOARDS(boards));
+    // set current board
     await setCurrentBoard(dispatch, currentBoard);
   }
 
@@ -40,8 +42,7 @@ export const setBoards = async dispatch => {
 // set current board
 const setCurrentBoard = async (dispatch, currentBoard) => {
   // get columns for the current board
-  currentBoard.columns = await getBoardColumns(currentBoard);
-  
+  currentBoard.columns = await getColumns(currentBoard.$id);
 
   // set current board (state)
   dispatch(SET_CURRENT_BOARD(currentBoard));
@@ -49,21 +50,17 @@ const setCurrentBoard = async (dispatch, currentBoard) => {
   addToStorage('current-board-id', currentBoard.$id);
 }
 
-// get current board columns
-const getBoardColumns = async board => {
-  // get all columns for specific board
-  const columnsQueryOptions = { equal: ['boardId', [board.$id]] }
-  let columns = await getDocuments(COLLECTION_COLUMNS_ID, columnsQueryOptions);
+// add new board
+export const addNewBoard = async (dispatch, data) => { 
+  const {name, columns} = data;
 
-  // get all tasks for all columns  
-  columns = await Promise.all(columns.map(async column => {
-    const taskQueryOptions = { equal: ['columnId', [column.$id]] };
-    const columnTasks = await getDocuments(COLLECTION_TASKS_ID, taskQueryOptions);
+  // add board to db
+  const addedBoard = await addDocument(COLLECTION_BOARDS_ID, {name: name.value});
 
-    return {...column, tasks: columnTasks};
-  }));
+  // add columns to db and add currentBoard
+  addedBoard.columns = await manageColumns(addedBoard.$id, columns.value);
 
-  return columns;
+  // setup state
+  dispatch(ADD_BOARD(addedBoard));
+  dispatch(SET_CURRENT_BOARD(addedBoard));
 }
-
-  // -- takodje mozda je dobro da posto ako nemamo board-ove onda nemamo ni sidebar sto mislim da je dobro npr. tok cekamo board-ove da sidebar bude skriven i kada stignu podaci da se prikaze da ne bismo imali vise loader-a vec samo onaj jedan na sredini
