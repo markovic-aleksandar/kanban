@@ -70,6 +70,8 @@
 
     &-adding {
       position: relative;
+      height: calc(100% - 37px);
+      top: 37px;
       background: linear-gradient(to bottom,rgba(121,132,147,.2),rgba(130,143,163,.1),rgba(130,143,163,0));
       border-radius: 8px;
       cursor: pointer;
@@ -96,10 +98,17 @@
         }
       }
     }
+
+    &-empty {
+      .Board__tasks {
+        outline: 2px dashed $gray-500;
+      }
+    }
   }
 
   &__tasks {
     flex: 1;
+    border-radius: 6px;
   }
 
   &__task {

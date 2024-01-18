@@ -3,7 +3,10 @@ import { IconPlus } from '../../constants/icons';
 
 const BoardColumn = ({currentColumn, currentColumnIndex, isAdding}) => {
   return (
-    <div className={isAdding ? 'Board__column Board__column-adding' : 'Board__column'}>
+    <div 
+      className={
+        isAdding ? 'Board__column Board__column-adding' : currentColumn.tasks.length < 1 ? 'Board__column Board__column-empty' : 'Board__column'}  
+    >
       {isAdding ? (
         <button type="button">
           <IconPlus /> New Column

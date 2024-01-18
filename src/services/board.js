@@ -12,7 +12,8 @@ import {
   hideLoader 
 } from './global';
 import { getColumns, addColumns, manageColumns } from './column';
-import { addToStorage } from '../utils/index';
+import { switchModal } from './modal';
+import { getFromStorage, addToStorage } from '../utils/index';
 
 // set boards
 export const setBoards = async dispatch => {
@@ -24,9 +25,11 @@ export const setBoards = async dispatch => {
   
   // check if the boards have items
   if (boards.length > 0) {
-    // check for the current board inside local storage otherwise use the first board from a list
-    const currentBoard = {...boards[0]};
-    
+    // set current board based on id from local storage or boards first element
+    const currentBoardIdStorage = getFromStorage('current-board-id');
+    const boardFromStorage = boards.find(boardItem => boardItem.$id === currentBoardIdStorage);
+    const currentBoard = boardFromStorage ? {...boardFromStorage} : {...boards[0]};
+
     // set boards
     dispatch(SET_BOARDS(boards));
     // set current board
@@ -63,4 +66,5 @@ export const addNewBoard = async (dispatch, data) => {
   // setup state
   dispatch(ADD_BOARD(addedBoard));
   dispatch(SET_CURRENT_BOARD(addedBoard));
+  switchModal(dispatch);
 }

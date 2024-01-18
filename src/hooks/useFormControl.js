@@ -200,8 +200,9 @@ const validateDataItem = (dataItem, isNested, currentIndex) => {
         }, dataItemValue);
 
         if (validatedDataItem) {
-          if (dataItemGroup[validatedDataItem.value]) return validatedDataItem;
-          dataItemGroup[validatedDataItem.value] = true;
+          const dataItemGroupProp = validatedDataItem.value.toLowerCase().trim();
+          if (dataItemGroup[dataItemGroupProp]) return validatedDataItem;
+          dataItemGroup[dataItemGroupProp] = true;
         }
       }
 
