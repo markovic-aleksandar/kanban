@@ -1,5 +1,5 @@
 import { COLLECTION_BOARDS_ID } from '../appwriteConfig';
-import { getDocuments, addDocument } from '../api/database';
+import { getDocuments, addDocument, updateDocument } from '../api/database';
 import { 
   SET_BOARDS,
   ADD_BOARD,
@@ -54,17 +54,33 @@ const setCurrentBoard = async (dispatch, currentBoard) => {
 }
 
 // add new board
-export const addNewBoard = async (dispatch, data) => { 
-  const {name, columns} = data;
+export const addNewBoard = async (dispatch, formData) => { 
+  const {name, columns: columnsData} = formData;
 
   // add board to db
   const addedBoard = await addDocument(COLLECTION_BOARDS_ID, {name: name.value});
 
-  // add columns to db and add currentBoard
-  addedBoard.columns = await manageColumns(columns.value, addedBoard.$id);
+  // manage columns
+  const columns = await manageColumns(columnsData.value, addedBoard.$id);
 
   // setup state
   dispatch(ADD_BOARD(addedBoard));
-  dispatch(SET_CURRENT_BOARD(addedBoard));
+  dispatch(SET_CURRENT_BOARD({...addedBoard, columns}));
+  switchModal(dispatch);
+}
+
+// edit board
+export const editBoard = async (dispatch, formData, currentBoard) => {
+  const {name, columns: columnsData} = formData;
+
+  // edit board db
+  const editedBoard = await updateDocument(COLLECTION_BOARDS_ID, currentBoard.$id, {name: name.value});
+
+  // manage columns
+  const columns = await manageColumns(columnsData.value, editedBoard.$id, currentBoard.columns);
+
+  // setup state
+  dispatch(UPDATE_BOARD(editedBoard));
+  dispatch(SET_CURRENT_BOARD({...editedBoard, columns}));
   switchModal(dispatch);
 }

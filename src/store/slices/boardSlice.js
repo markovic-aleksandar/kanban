@@ -17,8 +17,8 @@ const boardSlice = createSlice({
       state.boards = [...state.boards, action.payload];
     },
     UPDATE_BOARD: (state, action) => {
-      const {boardId, boardItem} = action.payload;
-      const updatedBoards = state.boards.map(board => board.id === boardId ? boardItem : board);
+      const boardItem = action.payload;
+      const updatedBoards = state.boards.map(board => board.$id === boardItem.$id ? boardItem : board);
       state.boards = updatedBoards;
     },
     DELETE_BOARD: (state, action) => {

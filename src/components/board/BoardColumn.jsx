@@ -9,12 +9,12 @@ const BoardColumn = ({currentColumn, currentColumnIndex, isAdding}) => {
   return (
     <div 
       className={
-        isAdding ? 'Board__column Board__column-adding' : currentColumn.tasks.length < 1 ? 'Board__column Board__column-empty' : 'Board__column'}  
+        isAdding ? 'Board__column Board__column-adding' : currentColumn.tasks.length < 1 ? 'Board__column Board__column-empty' : 'Board__column'}
     >
       {isAdding ? (
-        <button 
+        <button
           type="button"
-          onClick={() => showModal(dispatch, 'add-new-column')}  
+          onClick={() => showModal(dispatch, 'add-new-column')}
         >
           <IconPlus /> New Column
         </button>
