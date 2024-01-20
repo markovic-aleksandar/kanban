@@ -1,4 +1,4 @@
-import { COLLECTION_BOARDS_ID, COLLECTION_COLUMNS_ID, COLLECTION_TASKS_ID } from '../appwriteConfig';
+import { COLLECTION_BOARDS_ID } from '../appwriteConfig';
 import { getDocuments, addDocument } from '../api/database';
 import { 
   SET_BOARDS,
@@ -11,7 +11,7 @@ import {
   showLoader, 
   hideLoader 
 } from './global';
-import { getColumns, addColumns, manageColumns } from './column';
+import { getColumns, manageColumns } from './column';
 import { switchModal } from './modal';
 import { getFromStorage, addToStorage } from '../utils/index';
 
@@ -61,7 +61,7 @@ export const addNewBoard = async (dispatch, data) => {
   const addedBoard = await addDocument(COLLECTION_BOARDS_ID, {name: name.value});
 
   // add columns to db and add currentBoard
-  addedBoard.columns = await manageColumns(addedBoard.$id, columns.value);
+  addedBoard.columns = await manageColumns(columns.value, addedBoard.$id);
 
   // setup state
   dispatch(ADD_BOARD(addedBoard));

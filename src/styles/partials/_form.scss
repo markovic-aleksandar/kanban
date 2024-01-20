@@ -23,6 +23,10 @@
     position: relative;
   }
 
+  &__input-disabled {
+    opacity: 0.3;
+  }
+
   &__input-error input {
     border-color: $red;
 

@@ -144,6 +144,8 @@ const formatInitialData = initialData => {
       // check if current data value is empty array
       if (currentData.value.length === 0) {
         currentData.value = [{value: '', error: false}];
+      } else {
+        currentData.value = currentData.value.map(currentDataValueItem => ({...currentDataValueItem, value: currentDataValueItem.name, error: false}));
       }
 
       // check if current data is unique

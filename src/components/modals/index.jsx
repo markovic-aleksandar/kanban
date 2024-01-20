@@ -5,6 +5,7 @@ import { switchModal } from '../../services/modal';
 import ModalContent from './ModalContent';
 import AddBoard from './AddBoard';
 import EditBoard from './EditBoard';
+import AddNewColumn from './AddNewColumn';
 
 const Modal = ({modal}) => {
   const modalRef = useRef(null);
@@ -44,6 +45,18 @@ const Modal = ({modal}) => {
             currentEl="edit-board"
           >
             <EditBoard />
+          </ModalContent>
+        )}
+
+        {/* add new column */}
+        {(leave === 'add-new-column' || enter === 'add-new-column') && (
+          <ModalContent 
+            leave={leave}
+            enter={enter}
+            title="Add New Column"
+            currentEl="add-new-column"
+          >
+            <AddNewColumn />
           </ModalContent>
         )}
       </>

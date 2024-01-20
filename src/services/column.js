@@ -1,48 +1,70 @@
 import { COLLECTION_COLUMNS_ID } from '../appwriteConfig';
-import { getDocuments, addDocument } from '../api/database';
-
+import { getDocuments, addDocument, updateDocument, deleteDocument } from '../api/database';
+import { SET_CURRENT_BOARD_COLUMNS } from '../store/slices/boardSlice';
+import { switchModal } from './modal';
 
 // get columns
 export const getColumns = async boardId => {
   // get all columns for specific board
-  const columnsQueryOptions = { equal: ['boardId', [boardId]] }
+  const columnsQueryOptions = {equal: ['boardId', [boardId]]}
   return await getDocuments(COLLECTION_COLUMNS_ID, columnsQueryOptions);
 }
 
-// add (create) column
-export const addColumn = (boardId, column) => {}
-
-// add (create) columns
-export const addColumns = async (boardId, columns) => {
+// manage columns
+export const manageColumns = async (columns, currentBoardId, currentBoardColumns) => {
+  let columnsRequest = [...columns];
   const promises = [];
 
-  for (let i = 0; i < columns.length; i++) {
-    const addedColumn = addDocument(COLLECTION_COLUMNS_ID, {boardId, name: columns[i].value});
-    promises.push(addedColumn);
+  // check columns for update or delete
+  if (currentBoardColumns) {
+    for (let i = 0; i < currentBoardColumns.length; i++) {
+      const currentBoardColumn = currentBoardColumns[i];
+    
+      const foundColumn = columns.reduce((total, column, columnIndex) => {
+        if (column.$id === currentBoardColumn.$id) total = {index: columnIndex, item: column};
+        return total;
+      }, {index: null, item: null});
+
+      if (foundColumn.item) { // for update
+        columnsRequest.splice(foundColumn.index, 1, {...currentBoardColumn, value: foundColumn.item.value, action: 'update'});
+      } else { // for delete
+        columnsRequest.push({...currentBoardColumn, action: 'delete'});
+      }
+    }
   }
 
-  let addedColumns = await Promise.all(promises);
-  
-  // add tasks prop to each column
-  addedColumns = addedColumns.map(addedColumn => ({...addedColumn, tasks: []}))
+  for (let i = 0; i < columnsRequest.length; i++) {
+    const currentColumnRequest = columnsRequest[i];
 
-  return addedColumns;
+    // check for update document
+    if (currentColumnRequest.action && currentColumnRequest.action === 'update') {
+      const updatedDoc = await updateDocument(COLLECTION_COLUMNS_ID, currentColumnRequest.$id, {name: currentColumnRequest.value});
+      promises.push(updatedDoc);
+      continue;
+    }
 
-  // da li sada ovde da ova f-ja vrati ovu vrednosti
+    // check for delete document
+    if (currentColumnRequest.action && currentColumnRequest.action === 'delete') {
+      await deleteDocument(COLLECTION_COLUMNS_ID, currentColumnRequest.$id);
+      continue;
+    }
 
-  // isto tako neki loader bi trebao da bude na dugmetu
+    // add document
+    const addedDoc = await addDocument(COLLECTION_COLUMNS_ID, {boardId: currentBoardId, name: currentColumnRequest.value});
+    promises.push(addedDoc);
+  }
+
+  return promises;
 }
 
-// manage columns
-export const manageColumns = async (boardId, columns, currentBoardColumns) => {
-  // ova f-ja ce se zvati svaki put pri kreiranju, aziriranju i brisanju kolona iz baze
- 
-  const promises = [];
+// add new column
+export const addNewColumn = async (dispatch, formData, currentBoard) => {
+  const {value: columnsData} = formData.columns;
 
-  for (let i = 0; i < columns.length; i++) {
-    const addedColumn = addDocument(COLLECTION_COLUMNS_ID, {boardId, name: columns[i].value});
-    promises.push(addedColumn);
-  }
+  // manage columns data
+  const columns = await manageColumns(columnsData, currentBoard.$id, currentBoard.columns);
 
-  return await Promise.all(promises);
+  // setup state
+  dispatch(SET_CURRENT_BOARD_COLUMNS(columns));
+  switchModal(dispatch);
 }

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 const FormInput = ({type = 'text', data, handleChange}) => {
-  const {label, value, error, isFocusable} = data;
+  const {label, value, error, isFocusable, isDisabled} = data;
   const inputRef = useRef(null);
   
   // add focus on input if prop isFocus is true
@@ -12,7 +12,13 @@ const FormInput = ({type = 'text', data, handleChange}) => {
   return (
     <div className="Form FormInput">
       <label htmlFor={label} className="Form__label">{label}</label>
-      <div className={error ? 'Form__input-holder Form__input-error' : 'Form__input-holder'}>
+      <div 
+        className={
+          isDisabled ? 'Form__input-holder Form__input-disabled' :  
+          error ? 'Form__input-holder Form__input-error' : 
+          'Form__input-holder'
+        }  
+      >
         <input
           ref={isFocusable ? inputRef : null}
           type={type}
@@ -21,7 +27,8 @@ const FormInput = ({type = 'text', data, handleChange}) => {
           className="Form__input"
           value={value}
           autoComplete={label}
-          onChange={handleChange}
+          disabled={isDisabled || null}
+          onChange={!isDisabled ? handleChange : null}
         />
         {error && <span className="Form__error">{error}</span>}
       </div>

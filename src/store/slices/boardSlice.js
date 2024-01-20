@@ -39,7 +39,8 @@ export const {
   ADD_BOARD,
   UPDATE_BOARD,
   DELETE_BOARD,
-  SET_CURRENT_BOARD
+  SET_CURRENT_BOARD,
+  SET_CURRENT_BOARD_COLUMNS
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
