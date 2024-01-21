@@ -19,7 +19,7 @@
     padding: 2rem;
     background-color: var(--bckg-weak);
     border-radius: 10px;
-    overflow-y: auto;
+    // overflow-y: auto;
     opacity: 0;
 
     @include breakpoint-up(medium) {

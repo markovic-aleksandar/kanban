@@ -27,6 +27,17 @@ export const formatDatabaseQueries = (Query, queryOptions) => {
   return queries;
 }
 
+// format dropdown options
+export const formatDropdownOptions = initialOptions => {
+  return initialOptions.map(initialOption => {
+    return {
+      value: initialOption.name.toLowerCase().replace(/\s+/g, '-'),
+      label: initialOption.name,
+      style: initialOption.style || null
+    };
+  });
+}
+
 // delay to handle 
 export const delayToHandle = (delayFunction, delayValue) => {
   return new Promise(resolve => {

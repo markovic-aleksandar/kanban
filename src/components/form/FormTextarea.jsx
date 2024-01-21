@@ -1,10 +1,13 @@
-const FormTextarea = ({name, label, value, handleChange}) => {
+const FormTextarea = ({data, handleChange}) => {
+  const {label, value} = data;
+  
   return (
     <div className="Form FormInput">
-      <label className="Form__label">{label}</label>
+      <label htmlFor={label} className="Form__label">{label}</label>
       <div className="Form__input-holder">
         <textarea 
-          name={name}
+          name={label}
+          id={label}
           className="Form__textarea"
           value={value}
           onChange={handleChange}

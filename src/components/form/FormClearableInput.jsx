@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { IconClose } from '../../constants/icons';
+import { ButtonIcon } from '../Button';
+import { IconPlus, IconClose } from '../../constants/icons';
 
-const FormClearableInput = ({data, handleChange, handleRemove}) => {
+const FormClearableInput = ({data, maxDataLength, handleChange, handleAdd, handleRemove}) => {
   const {label, value: inputs, isFocusable} = data;
   const clearableInputsRef = useRef(null);
 
@@ -46,6 +47,16 @@ const FormClearableInput = ({data, handleChange, handleRemove}) => {
           )
         })}
       </div>
+
+      {inputs.length < maxDataLength && (
+        <ButtonIcon 
+          variant="FormClearableInput__input-add Button__small Button__full Button__light" 
+          value={`Add New ${label}`}
+          handleAction={() => handleAdd(label, maxDataLength)} 
+        >
+          <IconPlus />
+        </ButtonIcon>
+      )}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import ModalContent from './ModalContent';
 import AddBoard from './AddBoard';
 import EditBoard from './EditBoard';
 import AddNewColumn from './AddNewColumn';
+import AddTask from './AddTask';
 
 const Modal = ({modal}) => {
   const modalRef = useRef(null);
@@ -57,6 +58,18 @@ const Modal = ({modal}) => {
             currentEl="add-new-column"
           >
             <AddNewColumn />
+          </ModalContent>
+        )}
+
+        {/* add task */}
+        {(leave === 'add-task' || enter === 'add-task') && (
+          <ModalContent 
+            leave={leave}
+            enter={enter}
+            title="Add New Task"
+            currentEl="add-task"
+          >
+            <AddTask />
           </ModalContent>
         )}
       </>

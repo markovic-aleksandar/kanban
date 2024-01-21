@@ -1,8 +1,9 @@
 import { useRef, isValidElement, cloneElement } from 'react';
 import useClickOutside from '../hooks/useClickOutside';
 import useDropdown from '../hooks/useDropdown';
+import { IconChevron } from '../constants/icons';
 
-const DropdownMenu = ({menuType = 'dropdown', menuOptions, menuPlacement = 'left', menuStyle = null, menuTrigger = null, menuAction}) => {
+const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, menuPlacement = 'left', menuStyle = null, menuTrigger = null, menuAction}) => {
   const {isOpen, handleToggleDropdown, handleCloseDropdown, handleOptionDropdown} = useDropdown();
   const dropdownRef = useRef(null);
 
@@ -12,28 +13,33 @@ const DropdownMenu = ({menuType = 'dropdown', menuOptions, menuPlacement = 'left
   return (
     <div
       ref={dropdownRef}
-      className="Dropdown"
+      className={menuType === 'select' ? 'Dropdown__select' : 'Dropdown'}
     >
-      <MenuTrigger 
+      <MenuTrigger
         menuType={menuType}
-        menuTrigger={menuTrigger} 
+        menuTrigger={menuTrigger}
+        menuCurrentValue={menuCurrentValue}
+        menuIsOpen={isOpen}
         handleToggleDropdown={handleToggleDropdown} 
       />
       {isOpen && (
         <ul
-          style={menuStyle || null} 
-          className={`Dropdown__options Dropdown__options-${menuPlacement}`}
+          style={menuStyle || null}
+          className={`Dropdown__options Dropdown__options-${menuPlacement} ${menuType === 'select' && 'Dropdown__select-options'}`}
         >
           {menuOptions.map(option => {
-            const {key, name, style} = option;
+            const {value, label, style} = option;
             return (
-              <li key={key} className="Dropdown__option">
+              <li 
+                key={value} 
+                className={menuType === 'select' ? 'Dropdown__select-option' : 'Dropdown__option'}  
+              >
                 <button
                   type="button"
                   style={style || null}
-                  onClick={menuAction ? () => handleOptionDropdown(option, menuAction) : null}
+                  onClick={menuAction ? e => handleOptionDropdown(e, menuAction) : null}
                 >
-                  {name}
+                  {label}
                 </button>
               </li>
             )
@@ -45,18 +51,19 @@ const DropdownMenu = ({menuType = 'dropdown', menuOptions, menuPlacement = 'left
 }
 
 // menu trigger component
-const MenuTrigger = ({menuType, menuTrigger, handleToggleDropdown}) => {
-  // check if type is "select"
-  if (menuType === 'select') {
-    return '... ovde treba da vratis za select'
-  }
-
+const MenuTrigger = ({menuType, menuTrigger, menuCurrentValue, menuIsOpen, handleToggleDropdown}) => {
   // check if menu trigger is valid element
   if (isValidElement(menuTrigger)) {
     const menuTriggerEl = cloneElement(menuTrigger, 
       {
-        className: `${menuTrigger.props.className} Dropdown__trigger`, 
-        onClick: handleToggleDropdown
+        className: `${menuTrigger.props.className} Dropdown__trigger ${menuIsOpen && 'active'}`,
+        onClick: handleToggleDropdown,
+        children: menuType === 'select' ? (
+          <>
+            <span>{menuCurrentValue}</span>
+            <IconChevron color="#635fc7" />
+          </>
+        ) : menuTrigger.props.children
       }
     );
     return menuTriggerEl;
@@ -65,4 +72,4 @@ const MenuTrigger = ({menuType, menuTrigger, handleToggleDropdown}) => {
   return null;
 }
 
-export default DropdownMenu;
+export default Dropdown;

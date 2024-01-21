@@ -3,7 +3,7 @@ export { Button } from './Button';
 export { ButtonIcon } from './Button';
 export { default as Loader } from './Loader';
 
-// export { default as DropdownMenu } from './Dropdown';
+// theme toggle
 export { default as ThemeToggle } from './ThemeToggle';
 
 // navbar

@@ -71,10 +71,10 @@ const useFormControl = initialData => {
   }
 
   // handle add clearable input
-  const handleAddClearableInput = key => {
+  const handleAddClearableInput = (key, maxLength) => {
     setFormData(prevData => {
       // check if current key length is equal to 6
-      if (prevData[key].value.length >= 6) {
+      if (prevData[key].value.length >= maxLength) {
         return prevData;
       }
 

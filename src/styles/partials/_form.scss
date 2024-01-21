@@ -64,6 +64,11 @@
     &:not(:last-child) {
       margin-bottom: 0.5rem;
     }
+
+    &-add {
+      margin-top: 1rem;
+      text-transform: capitalize;
+    }
   
     &-remove {
       line-height: 1;
@@ -80,8 +85,6 @@
 }
 
 .FormCheckbox {
-  &__checkboxes {}
-
   &__checkbox {
     display: flex;
     align-items: center;
@@ -135,6 +138,39 @@
       &::before {
         transform: scale(1);
       }
+    }
+  }
+}
+
+.FormSelect {
+  &__trigger {
+    position: relative;
+    width: 100%;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    height: 2.5rem;
+    color: var(--title);
+    background-color: transparent;
+    padding: 0.5rem 1rem 0.5625rem;
+    border: 2px solid $gray-500;
+    border-radius: 4px;
+    transition: border 0.2s ease;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    svg {
+      position: absolute;
+      right: 1rem;
+      transition: $transition;
+    }
+  }
+
+  &__trigger.active {
+    border-color: $purple-700;
+
+    svg {
+      transform: rotate(180deg);
     }
   }
 }

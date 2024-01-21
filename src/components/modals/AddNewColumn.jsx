@@ -3,8 +3,7 @@ import useFormControl from '../../hooks/useFormControl';
 import { addNewColumn } from '../../services/column';
 import FormInput from '../form/FormInput';
 import FormClearableInput from '../form/FormClearableInput';
-import { Button, ButtonIcon } from '../Button';
-import { IconPlus } from '../../constants/icons';
+import { Button } from '../Button';
 
 const AddNewColumn = () => {
   const {currentBoard} = useSelector(store => store.board);
@@ -33,21 +32,11 @@ const AddNewColumn = () => {
       <div className="Modal__content-box">
         <FormClearableInput 
           data={formData.columns}
+          maxDataLength={6}
           handleChange={handleChangeFormData}
+          handleAdd={handleAddClearableInput}
           handleRemove={handleRemoveClearableInput}
         />
-      </div>
-
-      <div className="Modal__content-box">
-        {formData.columns.value.length < 6 && (
-          <ButtonIcon 
-            variant="Button__small Button__full Button__light" 
-            value="Add New Column"
-            handleAction={() => handleAddClearableInput(formData.columns.label)} 
-          >
-            <IconPlus />
-          </ButtonIcon>
-        )}
       </div>
 
       <div className="Modal__content-box">
