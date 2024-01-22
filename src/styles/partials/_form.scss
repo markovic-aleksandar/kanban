@@ -151,13 +151,17 @@
     height: 2.5rem;
     color: var(--title);
     background-color: transparent;
-    padding: 0.5rem 1rem 0.5625rem;
+    padding: 0.5rem 2rem 0.5625rem 1rem;
     border: 2px solid $gray-500;
     border-radius: 4px;
     transition: border 0.2s ease;
     display: flex;
     align-items: center;
     cursor: pointer;
+
+    span {
+      @extend .ellipsis-text;
+    }
 
     svg {
       position: absolute;

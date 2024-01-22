@@ -117,6 +117,10 @@
     border: 1px solid var(--border-line);
     border-radius: 8px;
 
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+
     h3 {
       color: var(--title);
       margin-bottom: 8px;

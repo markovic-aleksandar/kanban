@@ -28,6 +28,11 @@ const boardSlice = createSlice({
     SET_CURRENT_BOARD: (state, action) => {
       state.currentBoard = action.payload;
     },
+    SET_CURRENT_BOARD_COLUMN: (state, action) => {
+      const columnItem = action.payload;
+      const tempColumns = state.currentBoard.columns.map(column => column.$id === columnItem.$id ? columnItem : column);
+      state.currentBoard = {...state.currentBoard, columns: tempColumns};
+    },
     SET_CURRENT_BOARD_COLUMNS: (state, action) => {
       state.currentBoard = {...state.currentBoard, columns: action.payload};
     }
@@ -40,6 +45,7 @@ export const {
   UPDATE_BOARD,
   DELETE_BOARD,
   SET_CURRENT_BOARD,
+  SET_CURRENT_BOARD_COLUMN,
   SET_CURRENT_BOARD_COLUMNS
 } = boardSlice.actions;
 

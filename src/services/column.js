@@ -1,6 +1,6 @@
 import { COLLECTION_COLUMNS_ID } from '../appwriteConfig';
 import { getDocuments, addDocument, updateDocument, deleteDocument } from '../api/database';
-import { SET_CURRENT_BOARD_COLUMNS } from '../store/slices/boardSlice';
+import { SET_CURRENT_BOARD_COLUMN, SET_CURRENT_BOARD_COLUMNS } from '../store/slices/boardSlice';
 import { switchModal } from './modal';
 
 // get columns
@@ -66,5 +66,31 @@ export const addNewColumn = async (dispatch, formData, currentBoard) => {
 
   // setup state
   dispatch(SET_CURRENT_BOARD_COLUMNS(columns));
+  switchModal(dispatch);
+}
+
+// add new task
+export const addNewTask = async (dispatch, formData) => {
+  const {title: {value: title}, description: {value: description}, subtasks: {value: subtasks}, status: {value: currentColumn}} = formData;
+
+  // create new task item
+  const newTask = {
+    title,
+    description,
+    status: currentColumn.label,
+    subtasks: subtasks.map(subtask => ({
+      title: subtask.value,
+      complete: false
+    }))
+  };
+
+  // add created new task item to current column tasks
+  const currentColumnTasks = [...currentColumn.tasks, newTask];
+
+  // updated current column db
+  const updatedColumn = await updateDocument(COLLECTION_COLUMNS_ID, currentColumn.$id, {tasks: currentColumnTasks});
+
+  // setup state
+  dispatch(SET_CURRENT_BOARD_COLUMN(updatedColumn));
   switchModal(dispatch);
 }

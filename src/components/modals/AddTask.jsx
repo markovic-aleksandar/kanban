@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useFormControl from '../../hooks/useFormControl';
+import { addNewTask } from '../../services/column';
+import { formatDropdownOption } from '../../utils';
 import FormInput from '../form/FormInput';
 import FormTextarea from '../form/FormTextarea';
 import FormClearableInput from '../form/FormClearableInput';
@@ -7,13 +9,21 @@ import FormSelect from '../form/FormSelect';
 import { Button } from '../Button';
 
 const AddTask = () => {
-  const {currentBoard: {columns: currentBoardColumns}} = useSelector(store => store.board);
+  const {currentBoard} = useSelector(store => store.board);
   const {formData, handleChangeFormData, handleValidateFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
     title: {label: 'title', value: '', error: false, isRequired: true},
     description: {label: 'description', value: '', error: false},
     subtasks: {label: 'subtasks', value: [], isRequired: true, isUnique: true, isFocusable: true},
-    status: {label: 'status', value: currentBoardColumns[0].name, error: false}
+    status: {label: 'status', value: formatDropdownOption(currentBoard.columns[0]), error: false}
   });
+  const dispatch = useDispatch();
+
+  // handle add new task
+  const handleAddNewTask = () => {
+    handleValidateFormData(() => {
+      addNewTask(dispatch, formData, currentBoard);
+    });
+  }
 
   return (
     <>
@@ -42,9 +52,10 @@ const AddTask = () => {
       </div>
 
       <div className="Modal__content-box">
-        <FormSelect 
-          data={formData.status}
-          options={currentBoardColumns}
+        <FormSelect
+          label={formData.status.label}
+          value={formData.status.value.name}
+          options={currentBoard.columns}
           handleChange={handleChangeFormData}
         />
       </div>
@@ -53,7 +64,7 @@ const AddTask = () => {
         <Button 
           variant="Button__small Button__full Button__main" 
           value="Create Task" 
-          // handleAction={handleAddBoard}  
+          handleAction={handleAddNewTask}
         />
       </div>
     </>

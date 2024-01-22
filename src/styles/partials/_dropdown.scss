@@ -61,8 +61,10 @@
       color: $gray-400;
       cursor: pointer;
       transition: $transition;
+      @extend .ellipsis-text;
   
       &:hover {
+        font-weight: 700;
         color: var(--title);
       }
     }

@@ -1,25 +1,21 @@
 import { useDispatch } from 'react-redux';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { showModal } from '../../services/modal';
-import { formatDropdownOptions } from '../../utils';
 import { ButtonIcon } from "..";
 import Dropdown from '../Dropdown';
 import { IconPlus, IconEllipsis } from '../../constants/icons';
 
 const NavbarManage = () => {
   const isMobile = useMediaQuery('mobile');
-  const dropdownOptions = formatDropdownOptions([
-    {name: 'Edit Board', style: null},
-    {name: 'Delete Board', style: {color: '#ea5555'}}
-  ]);
+  const dropdownOptions = [
+    {value: 'edit-board', label: 'Edit Board', style: null},
+    {value: 'delete-board', label: 'Delete Board', style: {color: '#ea5555'}}
+  ];
   const dispatch = useDispatch();
 
   // handle board
-  const handleBoard = optionValue => { // vidi kako ovo mozda drugacije da handleujes
-    console.log(optionValue);
-    // if (optionValue.key === 'edit-board') {
-    //   showModal(dispatch, 'edit-board');
-    // }
+  const handleBoard = option => { // vidi kako ovo mozda drugacije da handleujes
+    console.log(option);
   }
 
   return (

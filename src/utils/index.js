@@ -28,14 +28,13 @@ export const formatDatabaseQueries = (Query, queryOptions) => {
 }
 
 // format dropdown options
-export const formatDropdownOptions = initialOptions => {
-  return initialOptions.map(initialOption => {
-    return {
-      value: initialOption.name.toLowerCase().replace(/\s+/g, '-'),
-      label: initialOption.name,
-      style: initialOption.style || null
-    };
-  });
+export const formatDropdownOption = initialOption => {
+  return {
+    ...initialOption,
+    value: initialOption.name.toLowerCase().replace(/\s+/g, '-'),
+    label: initialOption.name,
+    style: initialOption.style || null
+  }
 }
 
 // delay to handle 

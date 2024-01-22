@@ -37,7 +37,7 @@ const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, 
                 <button
                   type="button"
                   style={style || null}
-                  onClick={menuAction ? e => handleOptionDropdown(e, menuAction) : null}
+                  onClick={menuAction ? () => handleOptionDropdown(option, menuAction) : null}
                 >
                   {label}
                 </button>

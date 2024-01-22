@@ -14,11 +14,9 @@ const useDropdown = () => {
   }
 
   // handle option dropdown
-  const handleOptionDropdown = (e, handleAction) => {
-    // get target el value
-    const targetValue = e.currentTarget.textContent;
+  const handleOptionDropdown = (option, handleAction) => {
     // handle action
-    handleAction(targetValue);
+    handleAction(option);
     // handle close dropdown
     handleCloseDropdown();
   }

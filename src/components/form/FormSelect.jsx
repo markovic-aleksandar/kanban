@@ -1,18 +1,17 @@
 import Dropdown from '../Dropdown';
-import { formatDropdownOptions } from '../../utils';
+import { formatDropdownOption } from '../../utils';
 
-const FormSelect = ({data, options, handleChange}) => {
-  const {label, value} = data;
-  const dropdownOptions = formatDropdownOptions(options);
+const FormSelect = ({label, value, options, handleChange}) => {
+  const dropdownOptions = options.map(option => formatDropdownOption(option));
 
   // handle dropdown select change
-  const handleDropdownSelectChange = optionValue => {
-    handleChange({name: label, value: optionValue});
+  const handleDropdownSelectChange = option => {
+    handleChange({name: label, value: option});
   }
 
   return (
     <div className="Form FormSelect">
-      <label htmlFor={label} className="Form__label">{label}</label>
+      <label className="Form__label">{label}</label>
       <div className="Form__input-holder">
         <Dropdown 
           menuType="select"
