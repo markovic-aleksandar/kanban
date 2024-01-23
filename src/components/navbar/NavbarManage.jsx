@@ -35,7 +35,7 @@ const NavbarManage = () => {
         menuTrigger={
           <button
             type="button"
-            className="Dropdown__button"
+            className="Dropdown__ellipsis-button"
           >
             <IconEllipsis />
           </button>

@@ -7,6 +7,7 @@ import AddBoard from './AddBoard';
 import EditBoard from './EditBoard';
 import AddNewColumn from './AddNewColumn';
 import AddTask from './AddTask';
+import CurrentTask from './CurrentTask';
 
 const Modal = ({modal}) => {
   const modalRef = useRef(null);
@@ -21,7 +22,7 @@ const Modal = ({modal}) => {
 
   // show current modal
   const showCurrentModal = () => {
-    const {leave, enter} = modal;
+    const {leave, enter, data} = modal;
 
     return (
       <>
@@ -70,6 +71,17 @@ const Modal = ({modal}) => {
             currentEl="add-task"
           >
             <AddTask />
+          </ModalContent>
+        )}
+
+        {/* current task */}
+        {(data && (leave === 'current-task' || enter === 'current-task')) && (
+          <ModalContent 
+            leave={leave}
+            enter={enter}
+            currentEl="current-task"
+          >
+            <CurrentTask currentTask={data} />
           </ModalContent>
         )}
       </>

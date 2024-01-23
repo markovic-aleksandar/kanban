@@ -5,7 +5,7 @@ const initialState = {
   currentTheme: getFromStorage('theme') || 'dark',
   sidebarIsVisible: false,
   loader: true,
-  modal: {leave: null, enter: null}
+  modal: {leave: null, enter: null, data: null}
 };
 
 const globalSlice = createSlice({
@@ -22,13 +22,15 @@ const globalSlice = createSlice({
       state.loader = action.payload;
     },
     SHOW_MODAL: (state, action) => {
-      state.modal = {leave: null, enter: action.payload};
+      const {modal, data} = action.payload;
+      state.modal = {leave: null, enter: modal, data};
     },
     HIDE_MODAL: state => {
-      state.modal = {leave: null, enter: state.modal.enter};
+      state.modal = {leave: null, enter: state.modal.enter, data: null};
     },
     SWITCH_MODAL: (state, action) => {
-      state.modal = {leave: state.modal.enter, enter: action.payload || null};
+      const {modal, data} = action.payload;
+      state.modal = {leave: state.modal.enter, enter: modal, data};
     }
   }
 });

@@ -2,8 +2,11 @@ import { SHOW_MODAL, HIDE_MODAL, SWITCH_MODAL } from '../store/slices/globalSlic
 import { delayToHandle } from '../utils';
 
 // show modal
-export const showModal = (dispatch, modal) => {
-  dispatch(SHOW_MODAL(modal));
+export const showModal = (dispatch, modal, data) => {
+  dispatch(SHOW_MODAL({
+    modal, 
+    data: data || null
+  }));
 }
 
 // hide modal
@@ -12,8 +15,11 @@ export const hideModal = dispatch => {
 }
 
 // switch modal
-export const switchModal = (dispatch, modal) => {
-  dispatch(SWITCH_MODAL(modal));
+export const switchModal = (dispatch, modal, data) => {
+  dispatch(SWITCH_MODAL({
+    modal: modal || null,
+    data: data || null
+  }));
   // hide modal
   hideModal(dispatch);
 }

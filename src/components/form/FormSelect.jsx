@@ -1,8 +1,8 @@
 import Dropdown from '../Dropdown';
-import { formatDropdownOption } from '../../utils';
+import { formatListOption } from '../../utils';
 
 const FormSelect = ({label, value, options, handleChange}) => {
-  const dropdownOptions = options.map(option => formatDropdownOption(option));
+  const dropdownOptions = options.map(option => formatListOption(option));
 
   // handle dropdown select change
   const handleDropdownSelectChange = option => {

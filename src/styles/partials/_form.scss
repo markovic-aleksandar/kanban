@@ -104,6 +104,10 @@
       background-color: rgba(99, 95, 199, 0.25);
     }
 
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+
     &-checked {
       color: var(--checked);
       text-decoration-color: currentColor;

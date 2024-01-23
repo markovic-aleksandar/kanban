@@ -27,12 +27,13 @@ export const formatDatabaseQueries = (Query, queryOptions) => {
   return queries;
 }
 
-// format dropdown options
-export const formatDropdownOption = initialOption => {
+// format list option
+export const formatListOption = initialOption => {
+  const name = initialOption.name || initialOption.title;
   return {
     ...initialOption,
-    value: initialOption.name.toLowerCase().replace(/\s+/g, '-'),
-    label: initialOption.name,
+    value: name.toLowerCase().replace(/\s+/g, '-'),
+    label: name,
     style: initialOption.style || null
   }
 }

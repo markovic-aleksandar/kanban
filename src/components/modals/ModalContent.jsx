@@ -26,7 +26,9 @@ const ModalContent = ({leave, enter, title, currentEl, children}) => {
       {isMobile && <button type="button" className="Modal__close">
         <IconClose />
       </button>}
-      <h2 className="Modal__content-title">{title}</h2>
+      {title && <div className="Modal__content-header">
+        <h2 className="Modal__content-title">{title}</h2>
+      </div>}
       {children}
     </div>
   )

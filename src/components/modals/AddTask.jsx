@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useFormControl from '../../hooks/useFormControl';
 import { addNewTask } from '../../services/column';
-import { formatDropdownOption } from '../../utils';
+import { formatListOption } from '../../utils';
 import FormInput from '../form/FormInput';
 import FormTextarea from '../form/FormTextarea';
 import FormClearableInput from '../form/FormClearableInput';
@@ -14,7 +14,7 @@ const AddTask = () => {
     title: {label: 'title', value: '', error: false, isRequired: true},
     description: {label: 'description', value: '', error: false},
     subtasks: {label: 'subtasks', value: [], isRequired: true, isUnique: true, isFocusable: true},
-    status: {label: 'status', value: formatDropdownOption(currentBoard.columns[0]), error: false}
+    status: {label: 'status', value: formatListOption(currentBoard.columns[0]), error: false}
   });
   const dispatch = useDispatch();
 

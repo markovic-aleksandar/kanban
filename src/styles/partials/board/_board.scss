@@ -116,6 +116,11 @@
     background-color: var(--bckg-weak);
     border: 1px solid var(--border-line);
     border-radius: 8px;
+    transition: $transition;
+
+    &:hover {
+      filter: opacity(45%);
+    }
 
     &:not(:last-child) {
       margin-bottom: 1.5rem;

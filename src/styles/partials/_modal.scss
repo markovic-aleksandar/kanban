@@ -27,9 +27,21 @@
       height: auto;
     }
 
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
     &-title {
       color: var(--title);
-      margin-bottom: 1rem;
+    }
+
+    &-description {
+      font-size: 0.8125rem;
+      line-height: 23px;
+      margin-bottom: 1.5rem;
     }
 
     &-box:not(:last-child) {
