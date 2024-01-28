@@ -75,6 +75,7 @@ export const addNewTask = async (dispatch, formData) => {
 
   // create new task item
   const newTask = {
+    columnId: currentColumn.$id,
     title,
     description,
     status: currentColumn.label,
@@ -93,4 +94,9 @@ export const addNewTask = async (dispatch, formData) => {
   // setup state
   dispatch(SET_CURRENT_BOARD_COLUMN(updatedColumn));
   switchModal(dispatch);
+}
+
+// manage current task
+const manageCurrentTask = () => {
+  
 }

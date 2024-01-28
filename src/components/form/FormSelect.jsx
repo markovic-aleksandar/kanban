@@ -1,12 +1,10 @@
 import Dropdown from '../Dropdown';
-import { formatListOption } from '../../utils';
 
 const FormSelect = ({label, value, options, handleChange}) => {
-  const dropdownOptions = options.map(option => formatListOption(option));
-
+ 
   // handle dropdown select change
   const handleDropdownSelectChange = option => {
-    handleChange({name: label, value: option});
+    // handleChange({name: label, value: option});
   }
 
   return (
@@ -15,8 +13,8 @@ const FormSelect = ({label, value, options, handleChange}) => {
       <div className="Form__input-holder">
         <Dropdown 
           menuType="select"
-          menuOptions={dropdownOptions}
-          menuCurrentValue={value}
+          menuOptions={options}
+          menuOption={value}
           menuTrigger={
             <div className="FormSelect__trigger" />
           }

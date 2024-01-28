@@ -11,7 +11,7 @@ const ModalContent = ({leave, enter, title, currentEl, children}) => {
     if (!leave && enter === currentEl) {
       modalContent.current?.classList.add('fade-in');
     }
-
+    
     if (leave === currentEl) {
       modalContent.current?.classList.add('fade-out');
     }

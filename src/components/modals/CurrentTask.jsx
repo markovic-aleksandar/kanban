@@ -8,15 +8,15 @@ import { IconEllipsis } from '../../constants/icons';
 const CurrentTask = ({currentTask}) => {
   const {title, description, status, subtasks} = currentTask;
   const completedTasks = subtasks.filter(subTask => subTask.complete).length;
-  const {currentBoard} = useSelector(store => store.board);
-  console.log(currentTask);
-  // const {formData, handleChangeFormData} = useFormControl({
-  //   subtasks: {},
-  //   currentStatus: {label: 'status', value: formatListOption(currentBoard.columns[0]), error: false}
-  // });
+  const {currentBoard: {columns: currentBoardColumns}} = useSelector(store => store.board);
+  const currentColumn = currentBoardColumns.find(currentBoardColum => currentBoardColum.name === status);
+  const {formData, handleChangeFormData} = useFormControl({
+    subtasks: {},
+    currentStatus: {label: 'status', value: currentColumn, error: false}
+  });
   const dropdownOptions = [
-    {value: 'edit-task', label: 'Edit Task', style: null},
-    {value: 'delete-task', label: 'Delete Task', style: {color: '#ea5555'}}
+    {name: 'Edit Task', style: null},
+    {name: 'Delete Task', style: {color: '#ea5555'}}
   ];
 
   return (
@@ -39,6 +39,8 @@ const CurrentTask = ({currentTask}) => {
         />
       </div>
       
+      {/* <button onClick={}>Button</button> */}
+      
       <p className="Modal__content-description">{description || 'No description'}</p>
 
       <div className="Modal__content-box">
@@ -51,8 +53,8 @@ const CurrentTask = ({currentTask}) => {
       <div className="Modal__content-box">
         <FormSelect 
           label="Current status"
-          value={status}
-          options={currentBoard.columns}
+          value={formData.currentStatus.value}
+          options={currentBoardColumns}
         />
       </div>
     </>

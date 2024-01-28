@@ -30,7 +30,7 @@ const globalSlice = createSlice({
     },
     SWITCH_MODAL: (state, action) => {
       const {modal, data} = action.payload;
-      state.modal = {leave: state.modal.enter, enter: modal, data};
+      state.modal = {leave: state.modal.enter, enter: modal, data: data || state.modal.data};
     }
   }
 });

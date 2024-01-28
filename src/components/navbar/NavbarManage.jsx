@@ -8,8 +8,8 @@ import { IconPlus, IconEllipsis } from '../../constants/icons';
 const NavbarManage = () => {
   const isMobile = useMediaQuery('mobile');
   const dropdownOptions = [
-    {value: 'edit-board', label: 'Edit Board', style: null},
-    {value: 'delete-board', label: 'Delete Board', style: {color: '#ea5555'}}
+    {name: 'Edit Board', style: null},
+    {name: 'Delete Board', style: {color: '#ea5555'}}
   ];
   const dispatch = useDispatch();
 

@@ -3,8 +3,15 @@ import useClickOutside from '../hooks/useClickOutside';
 import useDropdown from '../hooks/useDropdown';
 import { IconChevron } from '../constants/icons';
 
-const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, menuPlacement = 'left', menuStyle = null, menuTrigger = null, menuAction}) => {
-  const {isOpen, handleToggleDropdown, handleCloseDropdown, handleOptionDropdown} = useDropdown();
+const Dropdown = ({menuType = 'dropdown', menuOptions, menuOption = null, menuPlacement = 'left', menuStyle = null, menuTrigger = null, menuAction}) => {
+  const {
+    isOpen,
+    options,
+    currentOption,
+    handleToggleDropdown, 
+    handleCloseDropdown, 
+    handleOptionDropdown
+  } = useDropdown(menuOptions, menuOption);
   const dropdownRef = useRef(null);
 
   // click outside to close dropdown
@@ -18,8 +25,8 @@ const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, 
       <MenuTrigger
         menuType={menuType}
         menuTrigger={menuTrigger}
-        menuCurrentValue={menuCurrentValue}
         menuIsOpen={isOpen}
+        menuCurrentOption={currentOption}
         handleToggleDropdown={handleToggleDropdown} 
       />
       {isOpen && (
@@ -27,7 +34,7 @@ const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, 
           style={menuStyle || null}
           className={`Dropdown__options Dropdown__options-${menuPlacement} ${menuType === 'select' && 'Dropdown__select-options'}`}
         >
-          {menuOptions.map(option => {
+          {options.map(option => {
             const {value, label, style} = option;
             return (
               <li 
@@ -37,7 +44,7 @@ const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, 
                 <button
                   type="button"
                   style={style || null}
-                  onClick={menuAction ? () => handleOptionDropdown(option, menuAction) : null}
+                  onClick={() => handleOptionDropdown(option, menuAction)}
                 >
                   {label}
                 </button>
@@ -51,7 +58,7 @@ const Dropdown = ({menuType = 'dropdown', menuOptions, menuCurrentValue = null, 
 }
 
 // menu trigger component
-const MenuTrigger = ({menuType, menuTrigger, menuCurrentValue, menuIsOpen, handleToggleDropdown}) => {
+const MenuTrigger = ({menuType, menuTrigger, menuIsOpen, menuCurrentOption, handleToggleDropdown}) => {
   // check if menu trigger is valid element
   if (isValidElement(menuTrigger)) {
     const menuTriggerEl = cloneElement(menuTrigger, 
@@ -60,7 +67,7 @@ const MenuTrigger = ({menuType, menuTrigger, menuCurrentValue, menuIsOpen, handl
         onClick: handleToggleDropdown,
         children: menuType === 'select' ? (
           <>
-            <span>{menuCurrentValue}</span>
+            <span>{menuCurrentOption?.label}</span>
             <IconChevron color="#635fc7" />
           </>
         ) : menuTrigger.props.children
