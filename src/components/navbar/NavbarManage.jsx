@@ -14,8 +14,14 @@ const NavbarManage = () => {
   const dispatch = useDispatch();
 
   // handle board
-  const handleBoard = option => { // vidi kako ovo mozda drugacije da handleujes
-    console.log(option);
+  const handleBoard = option => {
+    // edit board
+    if (option.key === 'edit-board') {
+      showModal(dispatch, option.key);
+    }
+
+    // delete board
+    // if (option.value === 'delete-board') {}
   }
 
   return (

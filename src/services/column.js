@@ -26,7 +26,8 @@ export const manageColumns = async (columns, currentBoardId, currentBoardColumns
       }, {index: null, item: null});
 
       if (foundColumn.item) { // for update
-        columnsRequest.splice(foundColumn.index, 1, {...currentBoardColumn, value: foundColumn.item.value, action: 'update'});
+        // columnsRequest.splice(foundColumn.index, 1, {...currentBoardColumn, value: foundColumn.item.value, action: 'update'});
+        columnsRequest.splice(foundColumn.index, 1, {...foundColumn.item, action: 'update'});
       } else { // for delete
         columnsRequest.push({...currentBoardColumn, action: 'delete'});
       }
@@ -38,7 +39,10 @@ export const manageColumns = async (columns, currentBoardId, currentBoardColumns
 
     // check for update document
     if (currentColumnRequest.action && currentColumnRequest.action === 'update') {
-      const updatedDoc = await updateDocument(COLLECTION_COLUMNS_ID, currentColumnRequest.$id, {name: currentColumnRequest.value});
+      const updatedDoc = await updateDocument(COLLECTION_COLUMNS_ID, currentColumnRequest.$id, {
+        name: currentColumnRequest.value || currentColumnRequest.name, 
+        tasks: currentColumnRequest.tasks
+      });
       promises.push(updatedDoc);
       continue;
     }
@@ -55,6 +59,31 @@ export const manageColumns = async (columns, currentBoardId, currentBoardColumns
   }
 
   return promises;
+}
+
+// manage task column
+const manageTaskColumn = (currentTask, currentColumn, columns) => {
+  return columns.map(column => {
+    // update inside the same column
+    if (currentTask.columnId === currentColumn.$id && column.$id === currentColumn.$id) {
+      const columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
+      return {...column, tasks: columnTasks};
+    }
+
+    // delete from the prev column
+    if (currentTask.columnId !== currentColumn.$id && column.$id === currentTask.columnId) {
+      const columnTasks = column.tasks.filter(task => task.$id !== currentTask.$id);
+      return {...column, tasks: columnTasks};
+    }
+
+    // add inside the new column
+    if (currentTask.columnId !== currentColumn.$id && column.$id === currentColumn.$id) {
+      const newCurrentTask = {...currentTask, columnId: column.$id, status: column.name};
+      return {...column, tasks: [...column.tasks, newCurrentTask]};
+    }
+
+    return column;
+  });
 }
 
 // add new column
@@ -97,6 +126,26 @@ export const addNewTask = async (dispatch, formData) => {
 }
 
 // manage current task
-const manageCurrentTask = () => {
+export const manageCurrentTask = async (dispatch, formData, currentTask, currentBoardColumns) => {
+  const {subtasks: {value: subtasks}, status: {value: currentColumn}} = formData;
   
+  // updated current task with new subtasks
+  const updatedCurrentTask = {
+    ...currentTask,
+    subtasks: subtasks.map(subtask => {
+      const tempSubtask = {...subtask};
+      // delete error prop
+      delete tempSubtask.error;
+      return tempSubtask;
+    })
+  };
+  
+  // manage current task column 
+  const managedTaskColumns = manageTaskColumn(updatedCurrentTask, currentColumn, currentBoardColumns);
+
+  // manage columns
+  const columns = await manageColumns(managedTaskColumns, false, currentBoardColumns);
+
+  // setup state
+  dispatch(SET_CURRENT_BOARD_COLUMNS(columns));
 }

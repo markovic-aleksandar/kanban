@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 const useFormControl = initialData => {
   const [formData, setFormData] = useState(formatInitialData(initialData));
+  const [formDataIsUpdated, setFormDataIsUpdated] = useState(false);
 
   // handle change form data
   const handleChangeFormData = prop => {
@@ -19,6 +20,7 @@ const useFormControl = initialData => {
 
         // update value for specific data item
         tempCurrentData.value = tempCurrentData.value.map((dataItem, index) => {
+          if (index === nameIndex && currentData.isCheckbox) return {...dataItem, complete: value};
           if (index === nameIndex) return {...dataItem, value};
           return dataItem;
         });
@@ -39,6 +41,9 @@ const useFormControl = initialData => {
         return {...prevData, [name]: tempCurrentData};
       }
     });
+
+    // mark form data as a updated
+    setFormDataIsUpdated(true);
   }
 
   const handleValidateFormData = handleAction => {
@@ -126,6 +131,7 @@ const useFormControl = initialData => {
 
   return {
     formData,
+    formDataIsUpdated,
     handleChangeFormData,
     handleValidateFormData,
     handleAddClearableInput,
@@ -141,6 +147,12 @@ const formatInitialData = initialData => {
     const currentData = tempInitialData[prop];
     // check if current data value is array
     if (Array.isArray(currentData.value)) {
+      // check if current data is checkbox
+      if (currentData.isCheckbox && currentData.value.length > 0) {
+        currentData.value = currentData.value.map(currentDataValueItem => ({...currentDataValueItem, error: false}));
+        continue;
+      }
+
       // check if current data value is empty array
       if (currentData.value.length === 0) {
         currentData.value = [{value: '', error: false}];

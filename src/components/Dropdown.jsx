@@ -35,10 +35,10 @@ const Dropdown = ({menuType = 'dropdown', menuOptions, menuOption = null, menuPl
           className={`Dropdown__options Dropdown__options-${menuPlacement} ${menuType === 'select' && 'Dropdown__select-options'}`}
         >
           {options.map(option => {
-            const {value, label, style} = option;
+            const {key, label, style} = option;
             return (
               <li 
-                key={value} 
+                key={key} 
                 className={menuType === 'select' ? 'Dropdown__select-option' : 'Dropdown__option'}  
               >
                 <button

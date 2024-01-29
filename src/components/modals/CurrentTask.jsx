@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useFormControl from '../../hooks/useFormControl';
+import { manageCurrentTask } from '../../services/column';
 import Dropdown from '../Dropdown';
 import FormCheckbox from '../form/FormCheckbox';
 import FormSelect from '../form/FormSelect';
@@ -7,17 +9,33 @@ import { IconEllipsis } from '../../constants/icons';
 
 const CurrentTask = ({currentTask}) => {
   const {title, description, status, subtasks} = currentTask;
-  const completedTasks = subtasks.filter(subTask => subTask.complete).length;
   const {currentBoard: {columns: currentBoardColumns}} = useSelector(store => store.board);
   const currentColumn = currentBoardColumns.find(currentBoardColum => currentBoardColum.name === status);
-  const {formData, handleChangeFormData} = useFormControl({
-    subtasks: {},
-    currentStatus: {label: 'status', value: currentColumn, error: false}
+  const {formData, formDataIsUpdated, handleChangeFormData} = useFormControl({
+    subtasks: {label: 'subtasks', value: subtasks, isCheckbox: true},
+    status: {label: 'status', value: currentColumn, error: false}
   });
+  const dispatch = useDispatch();
   const dropdownOptions = [
     {name: 'Edit Task', style: null},
     {name: 'Delete Task', style: {color: '#ea5555'}}
   ];
+  const currentTaskRef = useRef(currentTask);
+  const currentBoardColumnsRef = useRef(currentBoardColumns);
+
+  useEffect(() => {
+    currentTaskRef.current = currentTask;
+  }, [currentTask]);
+
+  useEffect(() => {
+    currentBoardColumnsRef.current = currentBoardColumns;
+  }, [currentBoardColumns]);
+
+  useEffect(() => {
+    if (formDataIsUpdated) {
+      manageCurrentTask(dispatch, formData, currentTaskRef.current, currentBoardColumnsRef.current);
+    }
+  }, [formData, formDataIsUpdated, dispatch]);
 
   return (
     <>
@@ -39,22 +57,22 @@ const CurrentTask = ({currentTask}) => {
         />
       </div>
       
-      {/* <button onClick={}>Button</button> */}
-      
       <p className="Modal__content-description">{description || 'No description'}</p>
 
       <div className="Modal__content-box">
         <FormCheckbox 
-          label={`Subtasks (${completedTasks} of ${subtasks.length})`}
-          options={subtasks}
+          label={formData.subtasks.label}
+          options={formData.subtasks.value}
+          handleChange={handleChangeFormData}
         />
       </div>
 
       <div className="Modal__content-box">
         <FormSelect 
-          label="Current status"
-          value={formData.currentStatus.value}
+          label={formData.status.label}
+          value={formData.status.value}
           options={currentBoardColumns}
+          handleChange={handleChangeFormData}
         />
       </div>
     </>
