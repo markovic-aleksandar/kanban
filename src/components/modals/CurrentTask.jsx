@@ -1,41 +1,50 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useFormControl from '../../hooks/useFormControl';
+import { switchModal } from '../../services/modal';
 import { manageCurrentTask } from '../../services/column';
 import Dropdown from '../Dropdown';
 import FormCheckbox from '../form/FormCheckbox';
 import FormSelect from '../form/FormSelect';
 import { IconEllipsis } from '../../constants/icons';
 
-const CurrentTask = ({currentTask}) => {
-  const {title, description, status, subtasks} = currentTask;
+const CurrentTask = ({currentTaskId}) => {
   const {currentBoard: {columns: currentBoardColumns}} = useSelector(store => store.board);
-  const currentColumn = currentBoardColumns.find(currentBoardColum => currentBoardColum.name === status);
+  const {currentColumn, currentTask} = currentBoardColumns.reduce((total, column) => {
+    const targetColumnTask = column.tasks.find(task => task.$id === currentTaskId);
+    if (targetColumnTask) total = {currentColumn: column, currentTask: targetColumnTask};
+    return total;
+  }, {currentColumn: null, currentTask: null});
+  const {title, description, subtasks} = currentTask;
   const {formData, formDataIsUpdated, handleChangeFormData} = useFormControl({
     subtasks: {label: 'subtasks', value: subtasks, isCheckbox: true},
     status: {label: 'status', value: currentColumn, error: false}
   });
+  const currentBoardColumnsRef = useRef(currentBoardColumns);
   const dispatch = useDispatch();
   const dropdownOptions = [
     {name: 'Edit Task', style: null},
     {name: 'Delete Task', style: {color: '#ea5555'}}
   ];
-  const currentTaskRef = useRef(currentTask);
-  const currentBoardColumnsRef = useRef(currentBoardColumns);
 
-  useEffect(() => {
-    currentTaskRef.current = currentTask;
-  }, [currentTask]);
+  // handle board
+  const handleBoard = option => {
+    // edit board
+    if (option.key === 'edit-task') {
+      switchModal(dispatch, option.key, currentTask);
+    }
+  }
 
   useEffect(() => {
     currentBoardColumnsRef.current = currentBoardColumns;
   }, [currentBoardColumns]);
 
+  // handle manage current task
   useEffect(() => {
     if (formDataIsUpdated) {
-      manageCurrentTask(dispatch, formData, currentTaskRef.current, currentBoardColumnsRef.current);
+      manageCurrentTask(dispatch, formData, currentTask, currentBoardColumnsRef.current);
     }
-  }, [formData, formDataIsUpdated, dispatch]);
+  }, [formData, formDataIsUpdated, currentTask, dispatch]);
 
   return (
     <>
@@ -53,7 +62,7 @@ const CurrentTask = ({currentTask}) => {
               <IconEllipsis />
             </button>
           }
-          // menuAction={handleBoard}
+          menuAction={handleBoard}
         />
       </div>
       

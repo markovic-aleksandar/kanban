@@ -8,6 +8,7 @@ import EditBoard from './EditBoard';
 import AddNewColumn from './AddNewColumn';
 import AddTask from './AddTask';
 import CurrentTask from './CurrentTask';
+import EditTask from './EditTask';
 
 const Modal = ({modal}) => {
   const modalRef = useRef(null);
@@ -23,7 +24,7 @@ const Modal = ({modal}) => {
   // show current modal
   const showCurrentModal = () => {
     const {leave, enter, data} = modal;
-
+    
     return (
       <>
         {/* add board */}
@@ -31,8 +32,8 @@ const Modal = ({modal}) => {
           <ModalContent 
             leave={leave} 
             enter={enter} 
-            title="Add New Board"
             currentEl="add-board"
+            title="Add New Board"
           >
             <AddBoard />
           </ModalContent>
@@ -43,8 +44,8 @@ const Modal = ({modal}) => {
           <ModalContent 
             leave={leave}
             enter={enter}
-            title="Edit Board"
             currentEl="edit-board"
+            title="Edit Board"
           >
             <EditBoard />
           </ModalContent>
@@ -55,8 +56,8 @@ const Modal = ({modal}) => {
           <ModalContent 
             leave={leave}
             enter={enter}
-            title="Add New Column"
             currentEl="add-new-column"
+            title="Add New Column"
           >
             <AddNewColumn />
           </ModalContent>
@@ -67,21 +68,33 @@ const Modal = ({modal}) => {
           <ModalContent 
             leave={leave}
             enter={enter}
-            title="Add New Task"
             currentEl="add-task"
+            title="Add New Task"
           >
             <AddTask />
           </ModalContent>
         )}
 
         {/* current task */}
-        {(data && (leave === 'current-task' || enter === 'current-task')) && (
+        {(data?.['current-task'] && (leave === 'current-task' || enter === 'current-task')) && (
           <ModalContent 
             leave={leave}
             enter={enter}
             currentEl="current-task"
           >
-            <CurrentTask currentTask={data} />
+            <CurrentTask currentTaskId={data['current-task']} />
+          </ModalContent>
+        )}
+
+        {/* edit task */}
+        {(data?.['edit-task'] && (leave === 'edit-task' || enter === 'edit-task')) && (
+          <ModalContent 
+            leave={leave}
+            enter={enter}
+            currentEl="edit-task"
+            title="Edit Task"
+          >
+            <EditTask currentTask={data['edit-task']} />
           </ModalContent>
         )}
       </>

@@ -157,7 +157,11 @@ const formatInitialData = initialData => {
       if (currentData.value.length === 0) {
         currentData.value = [{value: '', error: false}];
       } else {
-        currentData.value = currentData.value.map(currentDataValueItem => ({...currentDataValueItem, value: currentDataValueItem.name, error: false}));
+        currentData.value = currentData.value.map(currentDataValueItem => ({
+          ...currentDataValueItem, 
+          value: currentDataValueItem.value || currentDataValueItem.name || currentDataValueItem.title, 
+          error: false
+        }));
       }
 
       // check if current data is unique

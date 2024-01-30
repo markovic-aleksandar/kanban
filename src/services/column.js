@@ -128,24 +128,68 @@ export const addNewTask = async (dispatch, formData) => {
 // manage current task
 export const manageCurrentTask = async (dispatch, formData, currentTask, currentBoardColumns) => {
   const {subtasks: {value: subtasks}, status: {value: currentColumn}} = formData;
-  
-  // updated current task with new subtasks
+
+  // format subtasks
+  const formatedSubtasks = subtasks.map(subtask => {
+    const tempSubtask = {...subtask};
+    // delete error prop
+    delete tempSubtask.error;
+    return tempSubtask;
+  });
+
+  // updated current task
   const updatedCurrentTask = {
     ...currentTask,
-    subtasks: subtasks.map(subtask => {
-      const tempSubtask = {...subtask};
-      // delete error prop
-      delete tempSubtask.error;
-      return tempSubtask;
-    })
+    subtasks: formatedSubtasks
   };
   
-  // manage current task column 
-  const managedTaskColumns = manageTaskColumn(updatedCurrentTask, currentColumn, currentBoardColumns);
+  // manage current task column
+  let columns = manageTaskColumn(updatedCurrentTask, currentColumn, currentBoardColumns);
 
   // manage columns
-  const columns = await manageColumns(managedTaskColumns, false, currentBoardColumns);
+  columns = await manageColumns(columns, false, currentBoardColumns);
 
   // setup state
   dispatch(SET_CURRENT_BOARD_COLUMNS(columns));
+}
+
+// edit task
+export const editTask = async (dispatch, formData, currentTask, currentBoardColumns) => {
+  const {
+    title: {value: title},
+    description: {value: description},
+    subtasks: {value: subtasks},
+    status: {value: currentColumn}
+  } = formData;
+
+  // format subtasks
+  const formatedSubtasks = subtasks.map(subtask => {
+    if (subtask.$id) {
+      const tempSubtask = {...subtask, title: subtask.value};
+      // delete value and error props
+      delete tempSubtask.value;
+      delete tempSubtask.error;
+      return tempSubtask;
+    }
+
+    return {title: subtask.value, complete: false};
+  });
+
+  // updated current task
+  const updatedCurrentTask = {
+    ...currentTask,
+    title,
+    description,
+    subtasks: formatedSubtasks
+  };
+
+  // manage current task column
+  let columns = manageTaskColumn(updatedCurrentTask, currentColumn, currentBoardColumns);
+
+  // manage columns
+  columns = await manageColumns(columns, false, currentBoardColumns);
+  
+  // setup state
+  dispatch(SET_CURRENT_BOARD_COLUMNS(columns))
+  switchModal(dispatch);
 }

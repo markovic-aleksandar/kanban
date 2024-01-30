@@ -3,7 +3,7 @@ import useMediaQuery from '../../hooks/useMediaQuery';
 import { delayToHandle } from '../../utils';
 import { IconClose } from '../../constants/icons';
 
-const ModalContent = ({leave, enter, title, currentEl, children}) => {
+const ModalContent = ({leave, enter, currentEl, title, children}) => {
   const modalContent = useRef(null);
   const isMobile = useMediaQuery('mobile');
 
@@ -17,7 +17,7 @@ const ModalContent = ({leave, enter, title, currentEl, children}) => {
     }
 
     if (leave && enter === currentEl) {
-      delayToHandle(() => modalContent.current?.classList.add('fade-in'), 300);
+      delayToHandle(() => modalContent.current?.classList.add('fade-in'), 200);
     }
   }, [leave, enter, currentEl]);
 

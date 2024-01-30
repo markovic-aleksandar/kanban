@@ -23,14 +23,28 @@ const globalSlice = createSlice({
     },
     SHOW_MODAL: (state, action) => {
       const {modal, data} = action.payload;
-      state.modal = {leave: null, enter: modal, data};
+      const tempData = !data && !state.modal.data ? null : data && !state.modal.data ? {[modal]: data} : !data && state.modal.data ? state.modal.data : {...state.modal.data, [modal]: data};
+      
+      state.modal = {leave: null, enter: modal, data: tempData};
     },
     HIDE_MODAL: state => {
-      state.modal = {leave: null, enter: state.modal.enter, data: null};
+      let tempData = !state.modal.data || {};
+
+      for (let i in state.modal.data) {
+        if (i === state.modal.leave) {
+          if (Object.keys(state.modal.data).length === 1) tempData = null;
+          continue;
+        }
+        tempData[i] = state.modal.data[i];
+      }
+
+      state.modal = {...state.modal, leave: null, enter: state.modal.enter, data: tempData};
     },
     SWITCH_MODAL: (state, action) => {
       const {modal, data} = action.payload;
-      state.modal = {leave: state.modal.enter, enter: modal, data: data || state.modal.data};
+      const tempData = !data && !state.modal.data ? null : data && !state.modal.data ? {[modal]: data} : !data && state.modal.data ? state.modal.data : {...state.modal.data, [modal]: data};
+      
+      state.modal = {leave: state.modal.enter, enter: modal, data: tempData};
     }
   }
 });

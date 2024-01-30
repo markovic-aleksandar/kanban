@@ -4,7 +4,6 @@ const FormSelect = ({label, value, options, handleChange}) => {
  
   // handle dropdown select change
   const handleDropdownSelectChange = option => {
-    console.log(option);
     handleChange({name: label, value: option});
   }
 

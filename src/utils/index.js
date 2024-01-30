@@ -29,7 +29,7 @@ export const formatDatabaseQueries = (Query, queryOptions) => {
 
 // format list option
 export const formatListOption = initialOption => {
-  const name = initialOption.name || initialOption.title || initialOption.value;
+  const name = initialOption.value || initialOption.name || initialOption.title;
   return {
     ...initialOption,
     key: name.toLowerCase().replace(/\s+/g, '-'),

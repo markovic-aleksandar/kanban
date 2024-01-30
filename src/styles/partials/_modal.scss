@@ -21,6 +21,13 @@
     // overflow-y: auto;
     opacity: 0;
 
+    &.fade-out {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
     @include breakpoint-up(medium) {
       max-width: 30rem;
       height: auto;

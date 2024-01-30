@@ -11,7 +11,7 @@ export const showModal = (dispatch, modal, data) => {
 
 // hide modal
 export const hideModal = dispatch => {
-  delayToHandle(() => dispatch(HIDE_MODAL()), 300);
+  delayToHandle(() => dispatch(HIDE_MODAL()), 200);
 }
 
 // switch modal
