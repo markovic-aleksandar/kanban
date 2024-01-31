@@ -21,10 +21,6 @@ const boardSlice = createSlice({
       const updatedBoards = state.boards.map(board => board.$id === boardItem.$id ? boardItem : board);
       state.boards = updatedBoards;
     },
-    DELETE_BOARD: (state, action) => {
-      const deletedBoards = state.boards.filter(board => board.id !== action.payload);
-      state.boards = deletedBoards;
-    },
     SET_CURRENT_BOARD: (state, action) => {
       state.currentBoard = action.payload;
     },
@@ -43,7 +39,6 @@ export const {
   SET_BOARDS,
   ADD_BOARD,
   UPDATE_BOARD,
-  DELETE_BOARD,
   SET_CURRENT_BOARD,
   SET_CURRENT_BOARD_COLUMN,
   SET_CURRENT_BOARD_COLUMNS

@@ -40,6 +40,24 @@
       opacity: 0.9;
     }
   }
+
+  &__light-purple {
+    color: $purple-700;
+    background-color: $gray-250;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  &__danger {
+    color: $white;
+    background-color: $red;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
 }
 
 .Button__icon {

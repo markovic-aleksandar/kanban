@@ -9,6 +9,7 @@ import AddNewColumn from './AddNewColumn';
 import AddTask from './AddTask';
 import CurrentTask from './CurrentTask';
 import EditTask from './EditTask';
+import DeleteModal from './DeleteModal';
 
 const Modal = ({modal}) => {
   const modalRef = useRef(null);
@@ -95,6 +96,17 @@ const Modal = ({modal}) => {
             title="Edit Task"
           >
             <EditTask currentTask={data['edit-task']} />
+          </ModalContent>
+        )}
+
+        {/* delete modal */}
+        {(data?.['delete-modal'] && (leave === 'delete-modal' || enter === 'delete-modal')) && (
+          <ModalContent 
+            leave={leave}
+            enter={enter}
+            currentEl="delete-modal"
+          >
+            <DeleteModal {...data['delete-modal']} />
           </ModalContent>
         )}
       </>

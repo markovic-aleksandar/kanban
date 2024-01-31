@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { showModal } from '../../services/modal';
 import { ButtonIcon } from "..";
@@ -6,6 +6,7 @@ import Dropdown from '../Dropdown';
 import { IconPlus, IconEllipsis } from '../../constants/icons';
 
 const NavbarManage = () => {
+  const {currentBoard} = useSelector(store => store.board);
   const isMobile = useMediaQuery('mobile');
   const dropdownOptions = [
     {name: 'Edit Board', style: null},
@@ -21,7 +22,13 @@ const NavbarManage = () => {
     }
 
     // delete board
-    // if (option.value === 'delete-board') {}
+    if (option.key === 'delete-board') {
+      showModal(dispatch, 'delete-modal', {
+        type: 'board',
+        id: currentBoard.$id,
+        name: currentBoard.name
+      });
+    }
   }
 
   return (

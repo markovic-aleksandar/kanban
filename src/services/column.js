@@ -107,7 +107,7 @@ export const addNewTask = async (dispatch, formData) => {
     columnId: currentColumn.$id,
     title,
     description,
-    status: currentColumn.label,
+    status: currentColumn.name,
     subtasks: subtasks.map(subtask => ({
       title: subtask.value,
       complete: false

@@ -1,5 +1,5 @@
 import { COLLECTION_BOARDS_ID } from '../appwriteConfig';
-import { getDocuments, addDocument, updateDocument } from '../api/database';
+import { getDocuments, addDocument, updateDocument, deleteDocument } from '../api/database';
 import { 
   SET_BOARDS,
   ADD_BOARD,
@@ -44,6 +44,9 @@ export const setBoards = async dispatch => {
 
 // set current board
 const setCurrentBoard = async (dispatch, currentBoard) => {
+  // make current board object to be extensible
+  currentBoard = {...currentBoard};
+
   // get columns for the current board
   currentBoard.columns = await getColumns(currentBoard.$id);
 
@@ -83,4 +86,25 @@ export const editBoard = async (dispatch, formData, currentBoard) => {
   dispatch(UPDATE_BOARD(editedBoard));
   dispatch(SET_CURRENT_BOARD({...editedBoard, columns}));
   switchModal(dispatch);
+}
+
+// delete board
+export const deleteBoard = async (dispatch, boardId, boards, currentBoardColumns) => {
+  // delete board from db
+  await deleteDocument(COLLECTION_BOARDS_ID, boardId);
+  
+  // manage columns (delete all columns for current board from db)
+  await manageColumns([], false, currentBoardColumns);
+
+  // delete board from boards state
+  const newBoards = boards.filter(board => board.$id !== boardId);
+  dispatch(SET_BOARDS(newBoards));
+
+  // hide delete modal
+  switchModal(dispatch);
+  
+  // change current board
+  if (newBoards.length > 0) {
+    setCurrentBoard(dispatch, newBoards[0]);
+  }
 }
