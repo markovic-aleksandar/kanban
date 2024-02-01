@@ -25,7 +25,6 @@ const NavbarManage = () => {
     if (option.key === 'delete-board') {
       showModal(dispatch, 'delete-modal', {
         type: 'board',
-        id: currentBoard.$id,
         name: currentBoard.name
       });
     }

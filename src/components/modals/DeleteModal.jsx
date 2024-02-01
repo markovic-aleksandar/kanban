@@ -1,17 +1,19 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteBoard } from '../../services/board';
 import { switchModal } from '../../services/modal';
+import { deleteBoard } from '../../services/board';
+import { deleteTask } from '../../services/column';
 import { Button } from '../Button';
 
-const DeleteModal = ({type, id, name}) => {
+const DeleteModal = ({type, name, item}) => {
   const {boards, currentBoard} = useSelector(store => store.board);
   const dispatch = useDispatch();
 
   // handle delete
   const handleDelete = () => {
     // delete board
-    if (type === 'board') deleteBoard(dispatch, id, boards, currentBoard.columns);
+    if (type === 'board') deleteBoard(dispatch, {$id: currentBoard.$id, columns: currentBoard.columns}, boards);
     // else 
+    else deleteTask(dispatch, item, currentBoard.columns);
   }
 
   return (

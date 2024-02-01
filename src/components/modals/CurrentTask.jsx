@@ -27,11 +27,20 @@ const CurrentTask = ({currentTaskId}) => {
     {name: 'Delete Task', style: {color: '#ea5555'}}
   ];
 
-  // handle board
-  const handleBoard = option => {
-    // edit board
+  // handle task
+  const handleTask = option => {
+    // edit task
     if (option.key === 'edit-task') {
       switchModal(dispatch, option.key, currentTask);
+    }
+
+    // delete task
+    if (option.key === 'delete-task') {
+      switchModal(dispatch, 'delete-modal', {
+        type: 'task',
+        name: currentTask.title,
+        item: {$id: currentTask.$id, columnId: currentTask.columnId}
+      });
     }
   }
 
@@ -62,7 +71,7 @@ const CurrentTask = ({currentTaskId}) => {
               <IconEllipsis />
             </button>
           }
-          menuAction={handleBoard}
+          menuAction={handleTask}
         />
       </div>
       

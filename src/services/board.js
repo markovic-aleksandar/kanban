@@ -89,15 +89,17 @@ export const editBoard = async (dispatch, formData, currentBoard) => {
 }
 
 // delete board
-export const deleteBoard = async (dispatch, boardId, boards, currentBoardColumns) => {
+export const deleteBoard = async (dispatch, currentBoard, boards) => {
+  const {$id, columns} = currentBoard;
+  
   // delete board from db
-  await deleteDocument(COLLECTION_BOARDS_ID, boardId);
+  await deleteDocument(COLLECTION_BOARDS_ID, $id);
   
   // manage columns (delete all columns for current board from db)
-  await manageColumns([], false, currentBoardColumns);
+  await manageColumns([], false, columns);
 
   // delete board from boards state
-  const newBoards = boards.filter(board => board.$id !== boardId);
+  const newBoards = boards.filter(board => board.$id !== $id);
   dispatch(SET_BOARDS(newBoards));
 
   // hide delete modal

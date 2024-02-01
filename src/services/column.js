@@ -1,4 +1,4 @@
-import { COLLECTION_COLUMNS_ID } from '../appwriteConfig';
+import { COLLECTION_COLUMNS_ID, COLLECTION_TASKS_ID } from '../appwriteConfig';
 import { getDocuments, addDocument, updateDocument, deleteDocument } from '../api/database';
 import { SET_CURRENT_BOARD_COLUMN, SET_CURRENT_BOARD_COLUMNS } from '../store/slices/boardSlice';
 import { switchModal } from './modal';
@@ -26,7 +26,6 @@ export const manageColumns = async (columns, currentBoardId, currentBoardColumns
       }, {index: null, item: null});
 
       if (foundColumn.item) { // for update
-        // columnsRequest.splice(foundColumn.index, 1, {...currentBoardColumn, value: foundColumn.item.value, action: 'update'});
         columnsRequest.splice(foundColumn.index, 1, {...foundColumn.item, action: 'update'});
       } else { // for delete
         columnsRequest.push({...currentBoardColumn, action: 'delete'});
@@ -189,7 +188,28 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
   // manage columns
   columns = await manageColumns(columns, false, currentBoardColumns);
   
-  // setup state
+  // set curret board state
   dispatch(SET_CURRENT_BOARD_COLUMNS(columns))
+
+  // hide modal
+  switchModal(dispatch);
+}
+
+// delete task
+export const deleteTask = async (dispatch, currentTask, currentBoardColumns) => {
+  
+  // delete task from db
+  await deleteDocument(COLLECTION_TASKS_ID, currentTask.$id);  
+  
+  // manage task column
+  let columns = manageTaskColumn(currentTask, {$id: null}, currentBoardColumns);
+  
+  // manage columns
+  // columns = await manageColumns(columns, false, currentBoardColumns);
+
+  // set current board columns
+  dispatch(SET_CURRENT_BOARD_COLUMNS(columns));
+
+  // hide modal
   switchModal(dispatch);
 }
