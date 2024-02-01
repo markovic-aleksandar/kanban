@@ -21,6 +21,7 @@ const CurrentTask = ({currentTaskId}) => {
     status: {label: 'status', value: currentColumn, error: false}
   });
   const currentBoardColumnsRef = useRef(currentBoardColumns);
+  const currentTaskRef = useRef(currentTask);
   const dispatch = useDispatch();
   const dropdownOptions = [
     {name: 'Edit Task', style: null},
@@ -48,12 +49,16 @@ const CurrentTask = ({currentTaskId}) => {
     currentBoardColumnsRef.current = currentBoardColumns;
   }, [currentBoardColumns]);
 
+  useEffect(() => {
+    currentTaskRef.current = currentTask;
+  }, [currentTask]);
+
   // handle manage current task
   useEffect(() => {
     if (formDataIsUpdated) {
-      manageCurrentTask(dispatch, formData, currentTask, currentBoardColumnsRef.current);
+      manageCurrentTask(dispatch, formData, currentTaskRef.current, currentBoardColumnsRef.current);
     }
-  }, [formData, formDataIsUpdated, currentTask, dispatch]);
+  }, [formData, formDataIsUpdated, dispatch]);
 
   return (
     <>

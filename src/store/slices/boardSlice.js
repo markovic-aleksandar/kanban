@@ -31,6 +31,14 @@ const boardSlice = createSlice({
     },
     SET_CURRENT_BOARD_COLUMNS: (state, action) => {
       state.currentBoard = {...state.currentBoard, columns: action.payload};
+    },
+    CURRENT_BOARD_UPDATE_COLUMNS: (state, action) => {
+      let tempColumns = [...state.currentBoard.columns];
+      for (let i = 0; i < action.payload.length; i++) {
+        const column = action.payload[i];
+        tempColumns = tempColumns.map(tempColumn => tempColumn.$id === column.$id ? column : tempColumn);
+      }
+      state.currentBoard = {...state.currentBoard, columns: tempColumns};
     }
   }
 });
@@ -41,7 +49,8 @@ export const {
   UPDATE_BOARD,
   SET_CURRENT_BOARD,
   SET_CURRENT_BOARD_COLUMN,
-  SET_CURRENT_BOARD_COLUMNS
+  SET_CURRENT_BOARD_COLUMNS,
+  CURRENT_BOARD_UPDATE_COLUMNS
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
