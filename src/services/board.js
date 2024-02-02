@@ -30,7 +30,7 @@ export const setBoards = async dispatch => {
     const boardFromStorage = boards.find(boardItem => boardItem.$id === currentBoardIdStorage);
     const currentBoard = boardFromStorage ? {...boardFromStorage} : {...boards[0]};
 
-    // set boards
+    // set boards state
     dispatch(SET_BOARDS(boards));
     // set current board
     await setCurrentBoard(dispatch, currentBoard);
@@ -38,6 +38,7 @@ export const setBoards = async dispatch => {
 
   // show sidebar
   showSidebar(dispatch);
+
   // hide loader
   hideLoader(dispatch);
 }
@@ -52,12 +53,13 @@ const setCurrentBoard = async (dispatch, currentBoard) => {
 
   // set current board (state)
   dispatch(SET_CURRENT_BOARD(currentBoard));
+
   // set current board id (local storage)
   addToStorage('current-board-id', currentBoard.$id);
 }
 
 // add new board
-export const addNewBoard = async (dispatch, formData) => { 
+export const addNewBoard = async (dispatch, formData) => {
   const {name, columns: columnsData} = formData;
 
   // add board to db
@@ -66,10 +68,16 @@ export const addNewBoard = async (dispatch, formData) => {
   // manage columns
   const columns = await manageColumns(columnsData.value, addedBoard.$id);
 
-  // setup state
+  // add board state
   dispatch(ADD_BOARD(addedBoard));
+  // set current board state
   dispatch(SET_CURRENT_BOARD({...addedBoard, columns}));
+  
+  // hide modal
   switchModal(dispatch);
+
+  // set current board id (local storage)
+  addToStorage('current-board-id', addedBoard.$id);
 }
 
 // edit board
@@ -82,9 +90,12 @@ export const editBoard = async (dispatch, formData, currentBoard) => {
   // manage columns
   const columns = await manageColumns(columnsData.value, editedBoard.$id, currentBoard.columns);
 
-  // setup state
+  // update board state
   dispatch(UPDATE_BOARD(editedBoard));
+  // set current board state
   dispatch(SET_CURRENT_BOARD({...editedBoard, columns}));
+  
+  // hide modal
   switchModal(dispatch);
 }
 
@@ -102,7 +113,7 @@ export const deleteBoard = async (dispatch, currentBoard, boards) => {
   const newBoards = boards.filter(board => board.$id !== $id);
   dispatch(SET_BOARDS(newBoards));
 
-  // hide delete modal
+  // hide modal
   switchModal(dispatch);
   
   // change current board

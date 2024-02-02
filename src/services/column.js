@@ -65,39 +65,63 @@ export const manageColumns = async (columns, currentBoardId, currentBoardColumns
 }
 
 // manage task column
-const manageTaskColumn = async (currentTask, currentColumn, columns) => {
-  const columnsPromises = [];
+// const manageTaskColumn = async (currentTask, currentColumn, columns) => {
+//   const columnsPromises = [];
 
-  for (let i = 0; i < columns.length; i++) {
-    const column = columns[i];
-    let columnTasks = null;
+//   for (let i = 0; i < columns.length; i++) {
+//     const column = columns[i];
+//     let columnTasks = null;
     
+//     // update inside the same column
+//     if (currentTask.columnId === currentColumn.$id && column.$id === currentColumn.$id) {
+//       columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
+//     }
+
+//     // delete from the prev column
+//     if (currentTask.columnId !== currentColumn.$id && column.$id === currentTask.columnId) {
+//       columnTasks = column.tasks.filter(task => task.$id !== currentTask.$id);
+//     }
+
+//     // add inside the new column
+//     if (currentTask.columnId !== currentColumn.$id && column.$id === currentColumn.$id) {
+//       const newCurrentTask = {...currentTask, columnId: column.$id, status: column.name};
+//       columnTasks = [...column.tasks, newCurrentTask];
+//     }
+
+//     // updated current column inside db
+//     if (columnTasks) {
+//       const updatedColumn = await updateDocument(COLLECTION_COLUMNS_ID, column.$id, {
+//         tasks: columnTasks
+//       });
+//       columnsPromises.push(updatedColumn);
+//     }
+//   }
+
+//   return columnsPromises;
+// }
+
+const manageTaskColumn = (currentTask, currentColumn, columns) => {
+  return columns.map(column => {
     // update inside the same column
     if (currentTask.columnId === currentColumn.$id && column.$id === currentColumn.$id) {
-      columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
+      const columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
+      return {...column, tasks: columnTasks};
     }
 
     // delete from the prev column
     if (currentTask.columnId !== currentColumn.$id && column.$id === currentTask.columnId) {
-      columnTasks = column.tasks.filter(task => task.$id !== currentTask.$id);
+      const columnTasks = column.tasks.filter(task => task.$id !== currentTask.$id);
+      return {...column, tasks: columnTasks};
     }
 
     // add inside the new column
     if (currentTask.columnId !== currentColumn.$id && column.$id === currentColumn.$id) {
       const newCurrentTask = {...currentTask, columnId: column.$id, status: column.name};
-      columnTasks = [...column.tasks, newCurrentTask];
+      return {...column, tasks: [...column.tasks, newCurrentTask]};
     }
 
-    // updated current column inside db
-    if (columnTasks) {
-      const updatedColumn = await updateDocument(COLLECTION_COLUMNS_ID, column.$id, {
-        tasks: columnTasks
-      });
-      columnsPromises.push(updatedColumn);
-    }
-  }
-
-  return columnsPromises;
+    return column;
+  });
 }
 
 // add new column
@@ -155,14 +179,16 @@ export const manageCurrentTask = async (dispatch, formData, currentTask, current
     return tempSubtask;
   });
 
-  // updated current task
-  const updatedCurrentTask = {
-    ...currentTask,
+  // update current task inside db
+  await updateDocument(COLLECTION_TASKS_ID, currentTask.$id, {
+    column: currentColumn.$id,
+    columnId: currentColumn.$id,
+    status: currentColumn.name,
     subtasks: formatedSubtasks
-  };
+  });
   
   // manage current task column
-  const columns = await manageTaskColumn(updatedCurrentTask, currentColumn, currentBoardColumns);
+  const columns = manageTaskColumn({...currentTask, subtasks: formatedSubtasks}, currentColumn, currentBoardColumns);
 
   // current board update columns state
   dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
@@ -190,16 +216,18 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
     return {title: subtask.value, complete: false};
   });
 
-  // updated current task
-  const updatedCurrentTask = {
-    ...currentTask,
+  // update current task inside db
+  await updateDocument(COLLECTION_TASKS_ID, currentTask.$id, {
     title,
     description,
+    column: currentColumn.$id,
+    columnId: currentColumn.$id,
+    status: currentColumn.name,
     subtasks: formatedSubtasks
-  };
+  });
 
   // manage current task column
-  const columns = await manageTaskColumn(updatedCurrentTask, currentColumn, currentBoardColumns);
+  const columns = manageTaskColumn({...currentTask, title, description, subtasks: formatedSubtasks}, currentColumn, currentBoardColumns);
   
   // current board update columns state
   dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns))
