@@ -6,6 +6,8 @@ const DATABASE_ID = import.meta.env.VITE_DATABASE_ID;
 const COLLECTION_BOARDS_ID = import.meta.env.VITE_COLLECTION_BOARDS_ID;
 const COLLECTION_COLUMNS_ID = import.meta.env.VITE_COLLECTION_COLUMNS_ID;
 const COLLECTION_TASKS_ID = import.meta.env.VITE_COLLECTION_TASKS_ID;
+const COLLECTION_SUBTASKS_ID = import.meta.env.VITE_COLLECTION_SUBTASKS_ID;
+
 
 const client = new Client();
 client
@@ -19,5 +21,6 @@ export {
   COLLECTION_BOARDS_ID,
   COLLECTION_COLUMNS_ID,
   COLLECTION_TASKS_ID,
+  COLLECTION_SUBTASKS_ID,
   database,
 };

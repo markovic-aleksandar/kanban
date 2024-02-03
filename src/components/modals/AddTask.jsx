@@ -12,7 +12,7 @@ const AddTask = () => {
   const {formData, handleChangeFormData, handleValidateFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
     title: {label: 'title', value: '', error: false, isRequired: true},
     description: {label: 'description', value: '', error: false},
-    subtasks: {label: 'subtasks', value: [], isRequired: true, isUnique: true, isFocusable: true},
+    subtasks: {label: 'subtasks', value: [], isRequired: true, isFocusable: true},
     status: {label: 'status', value: currentBoard.columns[0], error: false}
   });
   const dispatch = useDispatch();

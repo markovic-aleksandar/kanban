@@ -1,4 +1,8 @@
-import { COLLECTION_COLUMNS_ID, COLLECTION_TASKS_ID } from '../appwriteConfig';
+import { 
+  COLLECTION_COLUMNS_ID, 
+  COLLECTION_TASKS_ID,
+  COLLECTION_SUBTASKS_ID
+} from '../appwriteConfig';
 import { getDocuments, addDocument, updateDocument, deleteDocument } from '../api/database';
 import {
   SET_CURRENT_BOARD_COLUMN, 
@@ -65,41 +69,6 @@ export const manageColumns = async (columns, currentBoardId, currentBoardColumns
 }
 
 // manage task column
-// const manageTaskColumn = async (currentTask, currentColumn, columns) => {
-//   const columnsPromises = [];
-
-//   for (let i = 0; i < columns.length; i++) {
-//     const column = columns[i];
-//     let columnTasks = null;
-    
-//     // update inside the same column
-//     if (currentTask.columnId === currentColumn.$id && column.$id === currentColumn.$id) {
-//       columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
-//     }
-
-//     // delete from the prev column
-//     if (currentTask.columnId !== currentColumn.$id && column.$id === currentTask.columnId) {
-//       columnTasks = column.tasks.filter(task => task.$id !== currentTask.$id);
-//     }
-
-//     // add inside the new column
-//     if (currentTask.columnId !== currentColumn.$id && column.$id === currentColumn.$id) {
-//       const newCurrentTask = {...currentTask, columnId: column.$id, status: column.name};
-//       columnTasks = [...column.tasks, newCurrentTask];
-//     }
-
-//     // updated current column inside db
-//     if (columnTasks) {
-//       const updatedColumn = await updateDocument(COLLECTION_COLUMNS_ID, column.$id, {
-//         tasks: columnTasks
-//       });
-//       columnsPromises.push(updatedColumn);
-//     }
-//   }
-
-//   return columnsPromises;
-// }
-
 const manageTaskColumn = (currentTask, currentColumn, columns) => {
   return columns.map(column => {
     // update inside the same column
@@ -202,22 +171,48 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
     subtasks: {value: subtasks},
     status: {value: currentColumn}
   } = formData;
+  const formatedSubtasks = [];
 
-  // format subtasks
-  const formatedSubtasks = subtasks.map(subtask => {
-    if (subtask.$id) {
-      const tempSubtask = {...subtask, title: subtask.value};
-      // delete value and error props
-      delete tempSubtask.value;
-      delete tempSubtask.error;
-      return tempSubtask;
+  // mark deleted subtasks if are exist
+  const deletedSubtasks = currentTask.subtasks.reduce((total, currentSubtask) => {
+    if (!subtasks.find(subtask => subtask.$id === currentSubtask.$id)) total = [...total, {
+      ...currentSubtask,
+      action: 'delete'
+    }];
+    return total;
+  }, []);
+
+  // concat sent subtasks with deleted subtasks
+  const tempSubtasks = subtasks.concat(deletedSubtasks);
+
+  // format subtasks and delete all tasks with action delete from db if are exist
+  for (let i = 0; i < tempSubtasks.length; i++) {
+    const tempSubtask = tempSubtasks[i];
+    
+    // check if exists task with action "delete"
+    if (tempSubtask?.action === 'delete') {
+      await deleteDocument(COLLECTION_SUBTASKS_ID, tempSubtask.$id);
+      continue;
     }
 
-    return {title: subtask.value, complete: false};
-  });
+    // format the rest subtasks
+    if (tempSubtask.$id) {
+      const formatedSubtask = {...tempSubtask, title: tempSubtask.value};
+      // delete value and error props
+      delete formatedSubtask.value;
+      delete formatedSubtask.error;
+      formatedSubtasks.push(formatedSubtask);
+      continue;
+    }
+
+    formatedSubtasks.push({
+      title: tempSubtask.value,
+      complete: false
+    });
+  }
 
   // update current task inside db
-  await updateDocument(COLLECTION_TASKS_ID, currentTask.$id, {
+  const updatedCurrentTask = await updateDocument(COLLECTION_TASKS_ID, currentTask.$id, {
     title,
     description,
     column: currentColumn.$id,
@@ -227,7 +222,7 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
   });
 
   // manage current task column
-  const columns = manageTaskColumn({...currentTask, title, description, subtasks: formatedSubtasks}, currentColumn, currentBoardColumns);
+  const columns = manageTaskColumn({...currentTask, title, description, subtasks: updatedCurrentTask.subtasks}, currentColumn, currentBoardColumns);
   
   // current board update columns state
   dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns))

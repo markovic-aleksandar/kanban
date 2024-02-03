@@ -27,13 +27,14 @@ export const setBoards = async dispatch => {
   if (boards.length > 0) {
     // set current board based on id from local storage or boards first element
     const currentBoardIdStorage = getFromStorage('current-board-id');
-    const boardFromStorage = boards.find(boardItem => boardItem.$id === currentBoardIdStorage);
-    const currentBoard = boardFromStorage ? {...boardFromStorage} : {...boards[0]};
+    // const boardFromStorage = boards.find(boardItem => boardItem.$id === currentBoardIdStorage);
+    // const currentBoard = boardFromStorage ? {...boardFromStorage} : {...boards[0]};
+    const currentBoardId = currentBoardIdStorage || boards[0].$id;
 
     // set boards state
     dispatch(SET_BOARDS(boards));
     // set current board
-    await setCurrentBoard(dispatch, currentBoard);
+    await setCurrentBoard(dispatch, boards, currentBoardId);
   }
 
   // show sidebar
@@ -44,9 +45,9 @@ export const setBoards = async dispatch => {
 }
 
 // set current board
-const setCurrentBoard = async (dispatch, currentBoard) => {
-  // make current board object to be extensible
-  currentBoard = {...currentBoard};
+const setCurrentBoard = async (dispatch, boards, currentBoardId) => {
+  // get current board by id
+  const currentBoard = {...boards.find(board => board.$id === currentBoardId)};
 
   // get columns for the current board
   currentBoard.columns = await getColumns(currentBoard.$id);
@@ -56,6 +57,18 @@ const setCurrentBoard = async (dispatch, currentBoard) => {
 
   // set current board id (local storage)
   addToStorage('current-board-id', currentBoard.$id);
+}
+
+// change current board
+export const changeCurrentBoard = async (dispatch, boards, currentBoardId) => {
+  // show global loader
+  showLoader(dispatch);
+
+  // set current board
+  await setCurrentBoard(dispatch, boards, currentBoardId);
+
+  // hide loader
+  hideLoader(dispatch);
 }
 
 // add new board
@@ -118,6 +131,6 @@ export const deleteBoard = async (dispatch, currentBoard, boards) => {
   
   // change current board
   if (newBoards.length > 0) {
-    setCurrentBoard(dispatch, newBoards[0]);
+    setCurrentBoard(dispatch, newBoards, newBoards[0].$id);
   }
 }

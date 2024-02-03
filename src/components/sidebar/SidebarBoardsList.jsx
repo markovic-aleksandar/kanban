@@ -1,10 +1,16 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { showModal } from '../../services/modal';
+import { changeCurrentBoard } from '../../services/board';
 import { IconBoard } from '../../constants/icons';
 
 const SidebarBoardsList = () => {
   const {boards, currentBoard} = useSelector(store => store.board);
   const dispatch = useDispatch();
+
+  // handle change current board
+  const handleChangeCurrentBoard = (currentBoardId) => {
+    changeCurrentBoard(dispatch, boards, currentBoardId);
+  }
 
   return (
     <div className="BoardsList">
@@ -18,6 +24,7 @@ const SidebarBoardsList = () => {
               key={$id}
               type="button"
               className={isActive ? 'BoardsList__tab BoardsList__tab--active' : 'BoardsList__tab'}
+              onClick={() => handleChangeCurrentBoard($id)}
             >
               <IconBoard />
               {name}
