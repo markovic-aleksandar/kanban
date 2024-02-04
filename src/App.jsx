@@ -24,6 +24,7 @@ const App = () => {
         nativeMobileScroll={true}
         vertical={false}
         hideScrollbars={false}
+        ignoreElements={'.Board__task'}
         component="main"
         className="Main"
       >

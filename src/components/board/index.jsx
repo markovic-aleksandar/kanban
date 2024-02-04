@@ -3,6 +3,7 @@ import { showModal } from '../../services/modal';
 import Loader from '../Loader';
 import { ButtonIcon } from '../Button';
 import BoardColumn from './BoardColumn';
+import { DragDropContext } from '@hello-pangea/dnd';
 import { IconPlus } from '../../constants/icons';
 
 const Board = () => {
@@ -20,14 +21,16 @@ const Board = () => {
         </div>
       ) : (
         boards.length > 0 && currentBoard ? (
-          <div className="Board__columns">
-            {currentBoard.columns.map((column, index) => {
-              return (
-                <BoardColumn key={column.$id} currentColumn={column} currentColumnIndex={index + 1} />
-              )
-            })}
-            <BoardColumn isAdding={true} />
-          </div>
+          <DragDropContext>
+            <div className="Board__columns">
+              {currentBoard.columns.map((column, index) => {
+                return (
+                  <BoardColumn key={column.$id} currentColumn={column} currentColumnIndex={index + 1} />
+                )
+              })}
+              <BoardColumn isAdding={true} />
+            </div>
+          </DragDropContext>
         ) : (
           <div className=" Board__flex-content Board__no-column">
             <p>No board found. Create a new board to get started.</p>
