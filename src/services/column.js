@@ -248,10 +248,10 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
 export const deleteTask = async (dispatch, currentTask, currentBoardColumns) => {
   
   // delete task from db
-  await deleteDocument(COLLECTION_TASKS_ID, currentTask.$id);  
+  await deleteDocument(COLLECTION_TASKS_ID, currentTask.$id);
   
   // manage task column
-  const columns = await manageTaskColumn(currentTask, {$id: null}, currentBoardColumns);
+  const columns = manageTaskColumn(currentTask, {$id: null}, currentBoardColumns);
 
   // current board update columns state
   dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
@@ -261,8 +261,12 @@ export const deleteTask = async (dispatch, currentTask, currentBoardColumns) => 
 }
 
 // move task
-export const moveTask = (dispatch, dragDropResult, currentBoardColumns) => {
-  const {draggableId, destination: {droppableId, index: droppableIndex}} = dragDropResult;
+export const moveTask = (dispatch, result, currentBoardColumns) => {
+  const {draggableId, destination, source} = result;
+
+  // prevent move for unknown destination and for the same position
+  if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) return;
+
   // get current task
   const currentTask = currentBoardColumns.reduce((total, column) => {
     const targetTask = column.tasks.find(task => task.$id === draggableId);
@@ -271,7 +275,7 @@ export const moveTask = (dispatch, dragDropResult, currentBoardColumns) => {
   }, null);
 
   // manage task column
-  const columns = manageTaskColumn(currentTask, {$id: droppableId, $index: droppableIndex}, currentBoardColumns);
+  const columns = manageTaskColumn(currentTask, {$id: destination.droppableId, $index: destination.index}, currentBoardColumns);
 
   // current board update columns state
   dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
@@ -279,7 +283,7 @@ export const moveTask = (dispatch, dragDropResult, currentBoardColumns) => {
   // update target columns inside db
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
-    const isTargetColumn = currentTask.columnId === droppableId ? column.$id === droppableId : column.$id === currentTask.columnId || column.$id === droppableId;
+    const isTargetColumn = currentTask.columnId === destination.droppableId ? column.$id === destination.droppableId : column.$id === currentTask.columnId || column.$id === destination.droppableId;
 
     if (isTargetColumn) updateDocument(COLLECTION_COLUMNS_ID, column.$id, {tasks: column.tasks});
   }

@@ -12,8 +12,8 @@ const Board = () => {
   const {boards, currentBoard} = useSelector(store => store.board);
   const dispatch = useDispatch();
 
-  const handleMoveTask = dragDropResult => {
-    moveTask(dispatch, dragDropResult, currentBoard.columns);
+  const handleMoveTask = result => {
+    moveTask(dispatch, result, currentBoard.columns);
   }
 
   return (
