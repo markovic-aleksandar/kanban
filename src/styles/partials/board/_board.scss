@@ -114,16 +114,13 @@
   &__task {
     padding: 1.5rem 1rem;
     background-color: var(--bckg-weak);
+    margin-bottom: 1.5rem;
     border: 1px solid var(--border-line);
     border-radius: 8px;
     transition: filter 0.2s ease;
 
     &:hover {
       filter: opacity(45%);
-    }
-
-    &:not(:last-child) {
-      margin-bottom: 1.5rem;
     }
 
     h3 {

@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { showModal } from '../../services/modal';
+import { moveTask } from '../../services/column';
 import Loader from '../Loader';
 import { ButtonIcon } from '../Button';
 import BoardColumn from './BoardColumn';
@@ -11,6 +12,10 @@ const Board = () => {
   const {boards, currentBoard} = useSelector(store => store.board);
   const dispatch = useDispatch();
 
+  const handleMoveTask = dragDropResult => {
+    moveTask(dispatch, dragDropResult, currentBoard.columns);
+  }
+
   return (
     <div 
       className={sidebarIsVisible ? 'Board' : 'Board Board__is-full'}
@@ -21,7 +26,7 @@ const Board = () => {
         </div>
       ) : (
         boards.length > 0 && currentBoard ? (
-          <DragDropContext>
+          <DragDropContext onDragEnd={handleMoveTask}>
             <div className="Board__columns">
               {currentBoard.columns.map((column, index) => {
                 return (

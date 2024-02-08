@@ -73,7 +73,14 @@ const manageTaskColumn = (currentTask, currentColumn, columns) => {
   return columns.map(column => {
     // update inside the same column
     if (currentTask.columnId === currentColumn.$id && column.$id === currentColumn.$id) {
-      const columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
+      let columnTasks = [];
+    
+      if (currentColumn.$index || currentColumn.$index === 0) {
+        columnTasks = column.tasks.filter(task => task.$id !== currentTask.$id);
+        columnTasks.splice(currentColumn.$index, 0, currentTask);
+      } else {
+        columnTasks = column.tasks.map(task => task.$id === currentTask.$id ? currentTask : task);
+      }
       return {...column, tasks: columnTasks};
     }
 
@@ -86,7 +93,13 @@ const manageTaskColumn = (currentTask, currentColumn, columns) => {
     // add inside the new column
     if (currentTask.columnId !== currentColumn.$id && column.$id === currentColumn.$id) {
       const newCurrentTask = {...currentTask, columnId: column.$id, status: column.name};
-      return {...column, tasks: [...column.tasks, newCurrentTask]};
+      const columnTasks = [...column.tasks];
+      if (currentColumn.$index || currentColumn.$index === 0) {
+        columnTasks.splice(currentColumn.$index, 0, newCurrentTask);
+      } else {
+        columnTasks.push(newCurrentTask);
+      }
+      return {...column, tasks: columnTasks};
     }
 
     return column;
@@ -238,11 +251,36 @@ export const deleteTask = async (dispatch, currentTask, currentBoardColumns) => 
   await deleteDocument(COLLECTION_TASKS_ID, currentTask.$id);  
   
   // manage task column
-  let columns = await manageTaskColumn(currentTask, {$id: null}, currentBoardColumns);
+  const columns = await manageTaskColumn(currentTask, {$id: null}, currentBoardColumns);
 
   // current board update columns state
   dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
 
   // hide modal
   switchModal(dispatch);
+}
+
+// move task
+export const moveTask = (dispatch, dragDropResult, currentBoardColumns) => {
+  const {draggableId, destination: {droppableId, index: droppableIndex}} = dragDropResult;
+  // get current task
+  const currentTask = currentBoardColumns.reduce((total, column) => {
+    const targetTask = column.tasks.find(task => task.$id === draggableId);
+    if (targetTask) total = {...targetTask};
+    return total; 
+  }, null);
+
+  // manage task column
+  const columns = manageTaskColumn(currentTask, {$id: droppableId, $index: droppableIndex}, currentBoardColumns);
+
+  // current board update columns state
+  dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
+
+  // update target columns inside db
+  for (let i = 0; i < columns.length; i++) {
+    const column = columns[i];
+    const isTargetColumn = currentTask.columnId === droppableId ? column.$id === droppableId : column.$id === currentTask.columnId || column.$id === droppableId;
+
+    if (isTargetColumn) updateDocument(COLLECTION_COLUMNS_ID, column.$id, {tasks: column.tasks});
+  }
 }
