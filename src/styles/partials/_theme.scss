@@ -7,6 +7,7 @@ $--border-line: --border-line;
 $--dropdown: --dropdown;
 $--icon-button: --icon-button;
 $--checked: --checked;
+$--scroll-bar: --scroll-bar;
 
 $theme-map-light: (
   $--bckg-strong: $gray-200,
@@ -17,7 +18,8 @@ $theme-map-light: (
   $--border-line: $gray-300,
   $--dropdown: $white,
   $--icon-button: $gray-300,
-  $--checked: rgba(0, 0, 0, 0.5)
+  $--checked: rgba(0, 0, 0, 0.5),
+  $--scroll-bar: $gray-400
 );
 
 $theme-map-dark: (
@@ -29,7 +31,8 @@ $theme-map-dark: (
   $--border-line: $dark-300,
   $--dropdown: $dark-500,
   $--icon-button: $dark-500,
-  $--checked: rgba(255, 255, 255, 0.5)
+  $--checked: rgba(255, 255, 255, 0.5),
+  $--scroll-bar: $gray-600
 );
 
 @mixin spread-map($map: ()) {
