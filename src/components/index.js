@@ -6,6 +6,9 @@ export { default as Loader } from './Loader';
 // theme toggle
 export { default as ThemeToggle } from './ThemeToggle';
 
+// show sidebar button
+export { default as ShowSidebarButton } from './ShowSidebarButton';
+
 // navbar
 export { default as Navbar } from './navbar';
 

@@ -1,11 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useMediaQuery from './hooks/useMediaQuery';
-import { showSidebar } from './services/global';
 import { setBoards } from './services/board';
-import { Navbar, Sidebar, Board, Modal } from './components';
+import { Navbar, Sidebar, Board, ShowSidebarButton, Modal } from './components';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import { IconShow } from './constants/icons';
 
 const App = () => {
   const {currentTheme, sidebarIsVisible, loader, modal} = useSelector(store => store.global);
@@ -30,15 +28,7 @@ const App = () => {
       >
         {!isMobile && <Sidebar sidebarIsVisible={sidebarIsVisible} />} 
         <Board />
-        {!isMobile && !sidebarIsVisible && !loader && (
-          <button 
-            type="button" 
-            className="Main__show-sidebar"
-            onClick={() => showSidebar(dispatch)}  
-          >
-            <IconShow />
-          </button>
-        )}
+        {!isMobile && !sidebarIsVisible && !loader && <ShowSidebarButton />}
       </ScrollContainer>
       {(modal.leave || modal.enter) && <Modal modal={modal} />}
     </div>

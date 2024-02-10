@@ -57,34 +57,14 @@
   }
 
   .Button__icon {
+    height: auto;
     padding: 0.5rem 1rem;
 
     @include breakpoint-up(medium) {
       padding: 1rem 1.5rem;
+      height: 3rem;
     }
   }
-
-  // .Dropdown__button {
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: center;
-  //   background-color: transparent;
-  //   color: $gray-400;
-  //   width: 1.375rem;
-  //   height: 2.375rem;
-  //   padding: 1px 0.25rem 1px 0.3125rem;
-  //   border-radius: 10px;
-  //   transform: scale(0.8);
-  //   transition: $transition;
-
-  //   @include breakpoint-up(medium) {
-  //     transform: scale(1);
-  //   }
-
-  //   &:hover {
-  //     background-color: var(--icon-button);
-  //   }
-  // }
 
   &__loader {
     width: 2rem;

@@ -10,8 +10,8 @@
   height: 100%;
   background-color: var(--bckg-strong);
 
-  &__show-sidebar {
-    position: absolute;
+  &__show-sidebar--button {
+    position: fixed;
     left: 0;
     bottom: 1.875rem;
     background-color: $purple-700;
