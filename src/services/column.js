@@ -10,6 +10,7 @@ import {
   CURRENT_BOARD_UPDATE_COLUMNS
 } from '../store/slices/boardSlice';
 import { switchModal } from './modal';
+import { delayToHandle } from '../utils';
 
 // get columns
 export const getColumns = async boardId => {
@@ -107,8 +108,12 @@ const manageTaskColumn = (currentTask, currentColumn, columns) => {
 }
 
 // add new column
-export const addNewColumn = async (dispatch, formData, currentBoard) => {
+export const addNewColumn = async (hooks, formData, currentBoard) => {
+  const {dispatch, setLoading} = hooks;
   const {value: columnsData} = formData.columns;
+
+  // show loading
+  setLoading(true);
 
   // manage columns data
   const columns = await manageColumns(columnsData, currentBoard.$id, currentBoard.columns);
@@ -118,11 +123,18 @@ export const addNewColumn = async (dispatch, formData, currentBoard) => {
 
   // hide modal
   switchModal(dispatch);
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }
 
 // add new task
-export const addNewTask = async (dispatch, formData) => {
+export const addNewTask = async (hooks, formData) => {
+  const {dispatch, setLoading} = hooks;
   const {title: {value: title}, description: {value: description}, subtasks: {value: subtasks}, status: {value: currentColumn}} = formData;
+
+  // show loading
+  setLoading(true);
 
   // create new task item
   const newTask = {
@@ -147,6 +159,9 @@ export const addNewTask = async (dispatch, formData) => {
 
   // hide modal
   switchModal(dispatch);
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }
 
 // manage current task
@@ -160,24 +175,25 @@ export const manageCurrentTask = async (dispatch, formData, currentTask, current
     delete tempSubtask.error;
     return tempSubtask;
   });
-
+  
+  // manage current task column
+  const columns = manageTaskColumn({...currentTask, subtasks: formatedSubtasks}, currentColumn, currentBoardColumns);
+  
+  // current board update columns state
+  dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
+  
   // update current task inside db
-  await updateDocument(COLLECTION_TASKS_ID, currentTask.$id, {
+  updateDocument(COLLECTION_TASKS_ID, currentTask.$id, {
     column: currentColumn.$id,
     columnId: currentColumn.$id,
     status: currentColumn.name,
     subtasks: formatedSubtasks
   });
-  
-  // manage current task column
-  const columns = manageTaskColumn({...currentTask, subtasks: formatedSubtasks}, currentColumn, currentBoardColumns);
-
-  // current board update columns state
-  dispatch(CURRENT_BOARD_UPDATE_COLUMNS(columns));
 }
 
 // edit task
-export const editTask = async (dispatch, formData, currentTask, currentBoardColumns) => {
+export const editTask = async (hooks, formData, currentTask, currentBoardColumns) => {
+  const {dispatch, setLoading} = hooks;
   const {
     title: {value: title},
     description: {value: description},
@@ -185,6 +201,9 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
     status: {value: currentColumn}
   } = formData;
   const formatedSubtasks = [];
+
+  // show loading
+  setLoading(true);
 
   // mark deleted subtasks if are exist
   const deletedSubtasks = currentTask.subtasks.reduce((total, currentSubtask) => {
@@ -242,11 +261,18 @@ export const editTask = async (dispatch, formData, currentTask, currentBoardColu
 
   // hide modal
   switchModal(dispatch);
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }
 
 // delete task
-export const deleteTask = async (dispatch, currentTask, currentBoardColumns) => {
+export const deleteTask = async (hooks, currentTask, currentBoardColumns) => {
+  const {dispatch, setLoading} = hooks;
   
+  // show loading
+  setLoading(true);
+
   // delete task from db
   await deleteDocument(COLLECTION_TASKS_ID, currentTask.$id);
   
@@ -258,6 +284,9 @@ export const deleteTask = async (dispatch, currentTask, currentBoardColumns) => 
 
   // hide modal
   switchModal(dispatch);
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }
 
 // move task

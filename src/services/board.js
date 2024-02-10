@@ -13,7 +13,7 @@ import {
 } from './global';
 import { getColumns, manageColumns } from './column';
 import { switchModal } from './modal';
-import { getFromStorage, addToStorage } from '../utils/index';
+import { getFromStorage, addToStorage, delayToHandle } from '../utils';
 
 // set boards
 export const setBoards = async dispatch => {
@@ -22,14 +22,12 @@ export const setBoards = async dispatch => {
 
   // get all boards
   const boards = await getDocuments(COLLECTION_BOARDS_ID);
-  
   // check if the boards have items
   if (boards.length > 0) {
     // set current board based on id from local storage or boards first element
     const currentBoardIdStorage = getFromStorage('current-board-id');
-    // const boardFromStorage = boards.find(boardItem => boardItem.$id === currentBoardIdStorage);
-    // const currentBoard = boardFromStorage ? {...boardFromStorage} : {...boards[0]};
-    const currentBoardId = currentBoardIdStorage || boards[0].$id;
+    const isExistStorageBoardId = boards.find(board => board.$id === currentBoardIdStorage);
+    const currentBoardId = isExistStorageBoardId ? currentBoardIdStorage : boards[0].$id;
 
     // set boards state
     dispatch(SET_BOARDS(boards));
@@ -72,8 +70,12 @@ export const changeCurrentBoard = async (dispatch, boards, currentBoardId) => {
 }
 
 // add new board
-export const addNewBoard = async (dispatch, formData) => {
+export const addNewBoard = async (hooks, formData) => {
+  const {dispatch, setLoading} = hooks;
   const {name, columns: columnsData} = formData;
+
+  // show loading
+  setLoading(true);
 
   // add board to db
   const addedBoard = await addDocument(COLLECTION_BOARDS_ID, {name: name.value});
@@ -91,11 +93,18 @@ export const addNewBoard = async (dispatch, formData) => {
 
   // set current board id (local storage)
   addToStorage('current-board-id', addedBoard.$id);
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }
 
 // edit board
-export const editBoard = async (dispatch, formData, currentBoard) => {
+export const editBoard = async (hooks, formData, currentBoard) => {
+  const {dispatch, setLoading} = hooks;
   const {name, columns: columnsData} = formData;
+
+  // show loading
+  setLoading(true);
 
   // edit board db
   const editedBoard = await updateDocument(COLLECTION_BOARDS_ID, currentBoard.$id, {name: name.value});
@@ -110,12 +119,19 @@ export const editBoard = async (dispatch, formData, currentBoard) => {
   
   // hide modal
   switchModal(dispatch);
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }
 
 // delete board
-export const deleteBoard = async (dispatch, currentBoard, boards) => {
+export const deleteBoard = async (hooks, currentBoard, boards) => {
+  const {dispatch, setLoading} = hooks;
   const {$id, columns} = currentBoard;
   
+  // show loading
+  setLoading(true);
+
   // delete board from db
   await deleteDocument(COLLECTION_BOARDS_ID, $id);
   
@@ -133,4 +149,7 @@ export const deleteBoard = async (dispatch, currentBoard, boards) => {
   if (newBoards.length > 0) {
     setCurrentBoard(dispatch, newBoards, newBoards[0].$id);
   }
+
+  // hide loading
+  delayToHandle(() => setLoading(false), 300);
 }

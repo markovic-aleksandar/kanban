@@ -5,9 +5,8 @@ import LogoDark from '../../assets/logo-dark.svg';
 import LogoLight from '../../assets/logo-light.svg';
 import LogoMobile from '../../assets/logo-mobile.svg';
 
-const NavbarBoards = () => {
+const NavbarBoards = ({boards, currentBoard}) => {
   let {currentTheme, loader} = useSelector(store => store.global);
-  const {boards, currentBoard} = useSelector(store => store.board);
   const isMobile = useMediaQuery('mobile');
   
   return (

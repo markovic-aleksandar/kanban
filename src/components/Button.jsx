@@ -1,11 +1,16 @@
-export const Button = ({type = 'button', variant, value, handleAction}) => {
+import Loader from './Loader';
+
+export const Button = ({type = 'button', variant, value, isLoading, handleAction}) => {
   return (
     <button
       type={type}
-      className={variant ? `Button ${variant}` : 'Button'}
-      onClick={handleAction ? handleAction : null}
+      // className={variant ? `Button ${variant}` : 'Button'}
+      className={`Button ${variant ? variant : ''} ${isLoading ? 'Button__disabled' : ''}`}
+      onClick={handleAction && !isLoading ? handleAction : null}
     >
-      {value}
+      {isLoading ? (
+        <Loader variant="Button" />
+      ) : value}
     </button>
   )
 }

@@ -1,4 +1,5 @@
 .Button, .Button__icon {
+  position: relative;
   display: inline-block;
   font-size: 0.9375rem;
   font-weight: 700;
@@ -7,6 +8,25 @@
   padding: 1rem 1.5rem;
   border-radius: 50px;
   transition: $transition;
+
+  &__disabled {
+    pointer-events: none;
+    filter: opacity(0.6);
+  }
+
+  &__loader {
+    pointer-events: none;
+    z-index: 1;
+
+    span {
+      width: 1.5rem;
+      height: 1.5rem;
+
+      &::before {
+        border: 2.5px solid $white;
+      }
+    }
+  }
 
   &__small {
     font-size: 0.8125rem;

@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import useLoading from '../../hooks/useLoading';
 import { switchModal } from '../../services/modal';
 import { deleteBoard } from '../../services/board';
 import { deleteTask } from '../../services/column';
@@ -6,14 +7,15 @@ import { Button } from '../Button';
 
 const DeleteModal = ({type, name, item}) => {
   const {boards, currentBoard} = useSelector(store => store.board);
+  const {isLoading, setLoading} = useLoading();
   const dispatch = useDispatch();
 
   // handle delete
   const handleDelete = () => {
     // delete board
-    if (type === 'board') deleteBoard(dispatch, {$id: currentBoard.$id, columns: currentBoard.columns}, boards);
+    if (type === 'board') deleteBoard({dispatch, setLoading}, {$id: currentBoard.$id, columns: currentBoard.columns}, boards);
     // else 
-    else deleteTask(dispatch, item, currentBoard.columns);
+    else deleteTask({dispatch, setLoading}, item, currentBoard.columns);
   }
 
   return (
@@ -34,6 +36,7 @@ const DeleteModal = ({type, name, item}) => {
         <Button 
           variant="Button__small Button__full Button__danger" 
           value="Delete"
+          isLoading={isLoading}
           handleAction={handleDelete}
         />
 

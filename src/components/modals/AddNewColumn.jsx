@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import useLoading from '../../hooks/useLoading';
 import useFormControl from '../../hooks/useFormControl';
 import { addNewColumn } from '../../services/column';
 import FormInput from '../form/FormInput';
@@ -10,13 +11,14 @@ const AddNewColumn = () => {
   const {formData, handleChangeFormData, handleValidateFormData, handleAddClearableInput, handleRemoveClearableInput} = useFormControl({
     name: {label: 'name', value: currentBoard.name, error: false, isDisabled: true},
     columns: {label: 'columns', value: currentBoard.columns, isRequired: true, isUnique: true, isFocusable: true}
-  })
+  });
+  const {isLoading, setLoading} = useLoading();
   const dispatch = useDispatch();
 
   // handle add new column
   const handleAddNewColumn = () => {
     handleValidateFormData(() => {
-      addNewColumn(dispatch, formData, currentBoard);
+      addNewColumn({dispatch, setLoading}, formData, currentBoard);
     });
   }
   
@@ -43,6 +45,7 @@ const AddNewColumn = () => {
         <Button 
           variant="Button__small Button__full Button__main" 
           value="Save Changes"
+          isLoading={isLoading}
           handleAction={handleAddNewColumn}
         />
       </div>

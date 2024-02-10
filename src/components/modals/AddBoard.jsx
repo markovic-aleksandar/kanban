@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import useLoading from '../../hooks/useLoading';
 import useFormControl from '../../hooks/useFormControl';
 import { addNewBoard } from '../../services/board';
 import FormInput from '../form/FormInput';
@@ -11,12 +12,13 @@ const AddBoard = () => {
     name: {label: 'name', value: '', error: false, isRequired: true, isUnique: boards},
     columns: {label: 'columns', value: [], isRequired: true, isUnique: true, isFocusable: true}
   });
+  const {isLoading, setLoading} = useLoading();
   const dispatch = useDispatch();
 
   // handle add board
   const handleAddBoard = () => {
     handleValidateFormData(() => {
-      addNewBoard(dispatch, formData);
+      addNewBoard({dispatch, setLoading}, formData);
     });
   }
 
@@ -42,7 +44,8 @@ const AddBoard = () => {
       <div className="Modal__content-box">
         <Button 
           variant="Button__small Button__full Button__main" 
-          value="Create New Board" 
+          value="Create New Board"
+          isLoading={isLoading}
           handleAction={handleAddBoard}  
         />
       </div>

@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import useLoading from '../../hooks/useLoading';
 import useFormControl from '../../hooks/useFormControl';
 import { addNewTask } from '../../services/column';
 import FormInput from '../form/FormInput';
@@ -15,12 +16,13 @@ const AddTask = () => {
     subtasks: {label: 'subtasks', value: [], isRequired: true, isFocusable: true},
     status: {label: 'status', value: currentBoard.columns[0], error: false}
   });
+  const {isLoading, setLoading} = useLoading();
   const dispatch = useDispatch();
 
   // handle add new task
   const handleAddNewTask = () => {
     handleValidateFormData(() => {
-      addNewTask(dispatch, formData, currentBoard);
+      addNewTask({dispatch, setLoading}, formData, currentBoard);
     });
   }
 
@@ -62,7 +64,8 @@ const AddTask = () => {
       <div className="Modal__content-box">
         <Button 
           variant="Button__small Button__full Button__main" 
-          value="Create Task" 
+          value="Create Task"
+          isLoading={isLoading}
           handleAction={handleAddNewTask}
         />
       </div>

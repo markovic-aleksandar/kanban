@@ -3,12 +3,12 @@ import NavbarBoards from './NavbarBoards';
 import NavbarManage from './NavbarManage';
 
 const Navbar = () => {
-  const {boards} = useSelector(store => store.board);
+  const {boards, currentBoard} = useSelector(store => store.board);
 
   return (
     <header className="Navbar">
-      <NavbarBoards />
-      {boards.length > 0 && <NavbarManage />}
+      <NavbarBoards boards={boards} currentBoard={currentBoard} />
+      {boards.length > 0 && currentBoard && <NavbarManage currentBoard={currentBoard} />}
     </header>
   )
 }

@@ -1,12 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { showModal } from '../../services/modal';
 import { ButtonIcon } from "..";
 import Dropdown from '../Dropdown';
 import { IconPlus, IconEllipsis } from '../../constants/icons';
 
-const NavbarManage = () => {
-  const {currentBoard} = useSelector(store => store.board);
+const NavbarManage = ({currentBoard}) => {
   const isMobile = useMediaQuery('mobile');
   const dropdownOptions = [
     {name: 'Edit Board', style: null},
